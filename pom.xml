@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+     | POM Relationships
+     -->
+
+	<parent>
+		<groupId>net.codjo.pom</groupId>
+		<artifactId>codjo-pom-application</artifactId>
+		<version>SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.codjo.tools</groupId>
+    <artifactId>codjo-tools-event-recorder</artifactId>
+    <version>2.2-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jdepend</groupId>
+            <artifactId>jdepend</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+    | Project Information
+    -->
+
+    <name>Tools &gt; Event Recorder</name>
+    <description>EventRecorder est un assistant ayant pour vocation de faciliter l'écriture des tests
+        fonctionnel IHM. Il produit un script au format de la librairie codjo-test-release.
+    </description>
+    <inceptionYear>2003</inceptionYear>
+
+    <!--
+    | Environment Information
+    -->
+
+    <scm>
+        <connection>scm:git:https://github.com/codjo/codjo-tools-event-recorder.git</connection>
+        <developerConnection>scm:git:https://github.com/codjo/codjo-tools-event-recorder.git</developerConnection>
+        <url>https://github.com/codjo/codjo-tools-event-recorder</url>
+    </scm>
+</project>

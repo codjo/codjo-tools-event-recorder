@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+    <properties>
+        <title>Changes</title>
+    </properties>
+    <body>
+        <release version="1.01" date="2005-09-26" description="Premier jet">
+            <action dev="gonnot" type="add">Premier Jet.</action>
+        </release>
+    </body>
+</document>
