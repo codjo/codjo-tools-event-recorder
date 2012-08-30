@@ -14,7 +14,7 @@
 
 	<groupId>net.codjo.tools</groupId>
     <artifactId>codjo-tools-event-recorder</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2</version>
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
