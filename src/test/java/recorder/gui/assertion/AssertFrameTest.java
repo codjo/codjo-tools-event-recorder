@@ -4,20 +4,17 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JTextField;
-import javax.swing.RootPaneContainer;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertFrame}.
+
  */
 public class AssertFrameTest extends TestCase {
     private AssertFrame assertFrame;
     private MockAssertContext assertContext;
+
 
     public void test_type() throws Exception {
         assertEquals(AbstractAssert.GLOBAL_ASSERT, assertFrame.getAssertType());
@@ -61,10 +58,11 @@ public class AssertFrameTest extends TestCase {
         assertFrame.update();
 
         assertEquals("AssertFrame titre='Options'",
-            assertFrame.getValue(AssertFrame.LABEL));
+                     assertFrame.getValue(AssertFrame.LABEL));
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         assertContext = new MockAssertContext();
         assertFrame = new AssertFrame(assertContext);
@@ -82,6 +80,6 @@ public class AssertFrameTest extends TestCase {
         Statement resultAssert = assertContext.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertFrame title=\"" + expectedTitle + "\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 }

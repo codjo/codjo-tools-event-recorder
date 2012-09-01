@@ -4,31 +4,24 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Component;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.Recorder;
 import recorder.component.GuiComponentFactory;
 /**
- * Classe de test de {@link AssertManager}.
+
  */
 public class AssertManagerTest extends TestCase {
     private AssertManager manager;
     private MockDialogManager mockDialogManager;
     private MouseEvent validEvent;
-    private Recorder recorder;
     private GuiComponentFactory factory;
+
 
     public void test_isAssertTrigger_valid() {
         assertTrue("Click Valide", manager.isAssertTrigger(validEvent));
@@ -37,12 +30,12 @@ public class AssertManagerTest extends TestCase {
 
     public void test_isAssertTrigger_badMouseEvent() {
         MouseEvent notClick =
-            newEvent(MouseEvent.MOUSE_ENTERED,
-                MouseEvent.CTRL_MASK | MouseEvent.BUTTON3_MASK);
+              newEvent(MouseEvent.MOUSE_ENTERED,
+                       MouseEvent.CTRL_MASK | MouseEvent.BUTTON3_MASK);
         assertFalse("Pas un click", manager.isAssertTrigger(notClick));
 
         MouseEvent badModifierEvent =
-            newEvent(MouseEvent.MOUSE_ENTERED, MouseEvent.BUTTON3_MASK);
+              newEvent(MouseEvent.MOUSE_ENTERED, MouseEvent.BUTTON3_MASK);
         assertFalse("Pas le bon modifier", manager.isAssertTrigger(badModifierEvent));
     }
 
@@ -51,7 +44,7 @@ public class AssertManagerTest extends TestCase {
         assertFalse("Pas un click", manager.isAssertTrigger(null));
 
         assertFalse("Pas le bon modifier",
-            manager.isAssertTrigger(new KeyEvent(new JTextField(), 0, 0, 0, 0)));
+                    manager.isAssertTrigger(new KeyEvent(new JTextField(), 0, 0, 0, 0)));
     }
 
 
@@ -67,17 +60,16 @@ public class AssertManagerTest extends TestCase {
 
 
     /**
-     * Test que le popup s'affiche correctement dans le cas particulier des invokers
-     * ayant des contentPane (JDialog , Frame). Il ne faut pas utiliser la source pour
-     * le popup mais le composant retourné par le finder.
+     * Test que le popup s'affiche correctement dans le cas particulier des invokers ayant des contentPane (JDialog , Frame). Il ne faut pas utiliser la source pour le popup mais le composant retourné par le finder.
      */
     public void test_popupTriggered_invokerWithContent() {
         JDialog source =
-            new JDialog() {
-                public Component findComponentAt(Point point) {
-                    return this.getContentPane();
-                }
-            };
+              new JDialog() {
+                  @Override
+                  public Component findComponentAt(Point point) {
+                      return this.getContentPane();
+                  }
+              };
 
         validEvent = newValidEventOn(source);
         manager.eventDispatched(validEvent);
@@ -97,7 +89,7 @@ public class AssertManagerTest extends TestCase {
         manager.eventDispatched(validEvent);
 
         assertEquals("Popup n'est pas affiché (car composant ignoré)", 0,
-            mockDialogManager.newPopupMenuCalled);
+                     mockDialogManager.newPopupMenuCalled);
     }
 
 
@@ -118,7 +110,7 @@ public class AssertManagerTest extends TestCase {
         assertEquals(validEvent.getPoint(), manager.getAssertContext().getPoint());
 
         // Assert les actions
-        List itemList = mockDialogManager.popupMenu.itemList;
+        List<JMenuItem> itemList = mockDialogManager.popupMenu.itemList;
         assertContainAction(AssertFrame.ID, itemList);
         assertContainAction(AssertSelected.ID, itemList);
         assertContainAction(AssertListSize.ID, itemList);
@@ -133,8 +125,8 @@ public class AssertManagerTest extends TestCase {
     public void test_source_jcombobox() {
         JComboBox comboBox = new JComboBox();
         MouseEvent eventUponCombo =
-            newEvent(MouseEvent.MOUSE_RELEASED, MouseEvent.BUTTON2_MASK,
-                comboBox.getComponent(0));
+              newEvent(MouseEvent.MOUSE_RELEASED, MouseEvent.BUTTON2_MASK,
+                       comboBox.getComponent(0));
 
         manager.eventDispatched(eventUponCombo);
 
@@ -147,11 +139,11 @@ public class AssertManagerTest extends TestCase {
 
         manager.eventDispatched(validEvent);
 
-        List itemList = mockDialogManager.popupMenu.itemList;
+        List<JMenuItem> itemList = mockDialogManager.popupMenu.itemList;
         assertTrue("Action assertFrame est global",
-            findMenuItem(AssertFrame.ID, itemList).isEnabled());
+                   findMenuItem(AssertFrame.ID, itemList).isEnabled());
         assertFalse("Action assertValue necessite un composant nommé",
-            findMenuItem(AssertValue.ID, itemList).isEnabled());
+                    findMenuItem(AssertValue.ID, itemList).isEnabled());
     }
 
 
@@ -160,18 +152,19 @@ public class AssertManagerTest extends TestCase {
 
         manager.eventDispatched(validEvent);
 
-        List itemList = mockDialogManager.popupMenu.itemList;
+        List<JMenuItem> itemList = mockDialogManager.popupMenu.itemList;
         assertTrue("Action assertFrame est global",
-            findMenuItem(AssertFrame.ID, itemList).isEnabled());
+                   findMenuItem(AssertFrame.ID, itemList).isEnabled());
         assertTrue("Action assertValue necessite un composant nommé",
-            findMenuItem(AssertValue.ID, itemList).isEnabled());
+                   findMenuItem(AssertValue.ID, itemList).isEnabled());
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         mockDialogManager = new MockDialogManager();
         factory = new GuiComponentFactory();
-        recorder = new Recorder(factory);
+        Recorder recorder = new Recorder(factory);
         manager = new AssertManager(recorder, mockDialogManager);
         this.validEvent = newValidEventOn(new JTextField());
     }
@@ -192,14 +185,13 @@ public class AssertManagerTest extends TestCase {
     }
 
 
-    private void assertContainAction(String actionId, List itemList) {
+    private void assertContainAction(String actionId, List<JMenuItem> itemList) {
         findMenuItem(actionId, itemList);
     }
 
 
-    private JMenuItem findMenuItem(String actionId, List itemList) {
-        for (Iterator iter = itemList.iterator(); iter.hasNext();) {
-            JMenuItem item = (JMenuItem)iter.next();
+    private JMenuItem findMenuItem(String actionId, List<JMenuItem> itemList) {
+        for (JMenuItem item : itemList) {
             if (actionId.equals(item.getActionCommand())) {
                 return item;
             }
@@ -208,22 +200,26 @@ public class AssertManagerTest extends TestCase {
         return null;
     }
 
+
     private static class MockDialogManager extends DialogManager {
         MockPopupMenu popupMenu = new MockPopupMenu();
         private int newPopupMenuCalled = 0;
 
+
+        @Override
         public JPopupMenu newPopupMenu() {
             newPopupMenuCalled++;
             return popupMenu;
         }
     }
 
-
     private static class MockPopupMenu extends JPopupMenu {
-        List itemList = new ArrayList();
+        List<JMenuItem> itemList = new ArrayList<JMenuItem>();
         Component invoker;
         Point location;
 
+
+        @Override
         public JMenuItem add(String label) {
             JMenuItem menuItem = super.add(label);
             itemList.add(menuItem);
@@ -231,6 +227,7 @@ public class AssertManagerTest extends TestCase {
         }
 
 
+        @Override
         public void show(Component source, int posX, int posY) {
             this.invoker = source;
             this.location = new Point(posX, posY);

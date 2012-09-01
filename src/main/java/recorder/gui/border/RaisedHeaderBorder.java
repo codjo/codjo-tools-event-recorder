@@ -4,27 +4,25 @@
  * Common Apache License 2.0
  */
 package recorder.gui.border;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 /**
- * Bordure qui ajoute un pseudo effet de 3D.
- * 
- * <p>
- * Utilise les couleurs 'controlLtHighlight' et 'controlShadow' définit dans le
- * UIManager.
- * </p>
+ * Border with a pseudo 3D effect.
+ *
+ * <p> Use 'controlLtHighlight' and 'controlShadow' colors defined in the UIManager. </p>
  */
 public class RaisedHeaderBorder extends AbstractBorder {
     private static final Insets INSETS = new Insets(1, 1, 1, 0);
 
+
+    @Override
     public Insets getBorderInsets(Component component) {
         return INSETS;
     }
 
 
+    @Override
     public void paintBorder(Component component, Graphics graphics, int x, int y, int w, int h) {
         graphics.translate(x, y);
         graphics.setColor(UIManager.getColor("controlLtHighlight"));

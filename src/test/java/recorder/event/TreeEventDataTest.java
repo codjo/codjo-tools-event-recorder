@@ -7,11 +7,12 @@ package recorder.event;
 import javax.swing.tree.TreePath;
 import junit.framework.TestCase;
 /**
- * Classe de test de {@link TreeEventData}.
+
  */
 public class TreeEventDataTest extends TestCase {
     private TreePath pathA;
     private TreePath pathB;
+
 
     public void test_constructor_bad() throws Exception {
         try {
@@ -30,7 +31,7 @@ public class TreeEventDataTest extends TestCase {
         assertTrue(treeEventData.equals(treeEventData));
         assertTrue(treeEventData.equals(new TreeEventData(pathA, true, true)));
         assertEquals(treeEventData.hashCode(),
-            new TreeEventData(pathA, true, true).hashCode());
+                     new TreeEventData(pathA, true, true).hashCode());
 
         assertFalse(treeEventData.equals("value"));
         assertFalse(treeEventData.equals(new TreeEventData(pathB, true, true)));
@@ -39,8 +40,9 @@ public class TreeEventDataTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws Exception {
-        pathA = new TreePath(new Object[] {"rootFolder"});
-        pathB = new TreePath(new Object[] {"rootFolder", "node"});
+        pathA = new TreePath(new Object[]{"rootFolder"});
+        pathB = new TreePath(new Object[]{"rootFolder", "node"});
     }
 }

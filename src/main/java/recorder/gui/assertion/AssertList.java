@@ -4,26 +4,27 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Component;
-import javax.swing.JList;
+import java.awt.*;
+import javax.swing.*;
 import recorder.gui.action.GuiAction;
 import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 /**
- * Permet de créer un tag assertSelected.
+ * Creates tag assertSelected.
  */
 class AssertList extends AbstractAssert {
     static final String ID = "assertion.selected";
     private AssertContext context;
 
+
     AssertList(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertList");
-        putValue(GuiAction.TOOLTIP,
-            "Ajoute un 'assertion' sur la valeur d'une ligne d'une JList");
+        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la valeur d'une ligne d'une JList");
 
         this.context = assertContext;
     }
+
 
     public void execute() {
         if (!canHandleComponentInContext()) {
@@ -36,12 +37,13 @@ class AssertList extends AbstractAssert {
         AttributeList attributes = new AttributeList();
         attributes.put("name", component.getName());
         attributes.put("expected", handler.getValue(component, rowAtPoint));
-        attributes.put("row", new Integer(rowAtPoint));
+        attributes.put("row", rowAtPoint);
 
         context.postAssert(new DefaultStatement("assertList", attributes));
     }
 
 
+    @Override
     public void update() {
         this.setEnabled(canHandleComponentInContext());
     }
@@ -59,8 +61,9 @@ class AssertList extends AbstractAssert {
         return null;
     }
 
+
     //------------------------------------------------------------------------------------------------------------------
-    // Handler des composants à list : JTable et JList
+    // Handlers for list components : JTable and JList
     //------------------------------------------------------------------------------------------------------------------
     private interface Handler {
         Object getValue(Component comp, int rowAtPoint);

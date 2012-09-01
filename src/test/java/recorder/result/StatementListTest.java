@@ -6,7 +6,7 @@
 package recorder.result;
 import junit.framework.TestCase;
 /**
- * Classe de test de {@link StatementList}.
+
  */
 public class StatementListTest extends TestCase {
     public void test_isEquivalentTo() throws Exception {
@@ -31,7 +31,7 @@ public class StatementListTest extends TestCase {
     public void test_isEquivalentTo_badcase() throws Exception {
         StatementList listA = new StatementList();
         assertFalse("Pas le même nombre d'élément",
-            listA.isEquivalentTo(newStatement("tag1")));
+                    listA.isEquivalentTo(newStatement("tag1")));
     }
 
 

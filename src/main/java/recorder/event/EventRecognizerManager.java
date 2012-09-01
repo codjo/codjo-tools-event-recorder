@@ -4,53 +4,46 @@
  * Common Apache License 2.0
  */
 package recorder.event;
-import java.awt.AWTEvent;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JTable;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 /**
- * Transforme les event awt en {@link GuiEvent}.
+ * Transform AWT event into {@link GuiEvent}.
  */
 public class EventRecognizerManager {
     private GuiComponentFactory factory;
-    private List recognizerList = new ArrayList();
+    private List<EventRecognizer> recognizers = new ArrayList<EventRecognizer>();
+
 
     public EventRecognizerManager(GuiComponentFactory factory) {
         this.factory = factory;
-        recognizerList.add(new MenuClickRecognizer());
-        recognizerList.add(new ButtonClickRecognizer());
-        recognizerList.add(new CheckboxClickRecognizer());
-        recognizerList.add(new TableClickRecognizer());
-        recognizerList.add(new ListClickRecognizer());
-        recognizerList.add(new TreePreClickRecognizer());
-        recognizerList.add(new TreeClickRecognizer());
-        recognizerList.add(new KeyReleasedRecognizer());
-        recognizerList.add(new ComboFocusRecognizer(FocusEvent.FOCUS_GAINED));
-        recognizerList.add(new ComboFocusRecognizer(FocusEvent.FOCUS_LOST));
+        recognizers.add(new MenuClickRecognizer());
+        recognizers.add(new ButtonClickRecognizer());
+        recognizers.add(new CheckboxClickRecognizer());
+        recognizers.add(new TableClickRecognizer());
+        recognizers.add(new ListClickRecognizer());
+        recognizers.add(new TreePreClickRecognizer());
+        recognizers.add(new TreeClickRecognizer());
+        recognizers.add(new KeyReleasedRecognizer());
+        recognizers.add(new ComboFocusRecognizer(FocusEvent.FOCUS_GAINED));
+        recognizers.add(new ComboFocusRecognizer(FocusEvent.FOCUS_LOST));
     }
+
 
     public GuiEvent toGuiEvent(AWTEvent awtEvent) {
         if (isUninterestingEvent(awtEvent)) {
             return null;
         }
 
-        for (Iterator iter = recognizerList.iterator(); iter.hasNext();) {
-            EventRecognizer recognizer = (EventRecognizer)iter.next();
+        for (EventRecognizer recognizer : recognizers) {
             if (recognizer.recognize(awtEvent)) {
                 return recognizer.toGuiEvent(awtEvent);
             }
@@ -69,6 +62,7 @@ public class EventRecognizerManager {
         return guiComponent == null || !guiComponent.isFindable();
     }
 
+
     // ----------------------------------------------------------------------------------
     // Base class for EventRecognizer
     // ----------------------------------------------------------------------------------
@@ -77,11 +71,13 @@ public class EventRecognizerManager {
         private int eventId;
         private Class sourceClass;
 
+
         protected AbstractRecognizer(Class eventClass, int eventId, Class sourceClass) {
             this.eventClass = eventClass;
             this.eventId = eventId;
             this.sourceClass = sourceClass;
         }
+
 
         public int getEventId() {
             return eventId;
@@ -90,7 +86,7 @@ public class EventRecognizerManager {
 
         public boolean recognize(AWTEvent awtEvent) {
             return eventClass.isAssignableFrom(awtEvent.getClass())
-            && awtEvent.getID() == eventId && findSource(awtEvent).isA(sourceClass);
+                   && awtEvent.getID() == eventId && findSource(awtEvent).isA(sourceClass);
         }
 
 
@@ -99,16 +95,18 @@ public class EventRecognizerManager {
         }
     }
 
-
     // ----------------------------------------------------------------------------------
-    // Click Recognizer
+    // Click Recognizers
     // ----------------------------------------------------------------------------------
     private abstract class MouseClickRecognizer extends AbstractRecognizer {
         protected MouseClickRecognizer(int eventId, Class sourceClass) {
             super(MouseEvent.class, eventId, sourceClass);
         }
 
+
+        @Override
         public boolean recognize(AWTEvent awtEvent) {
+            //noinspection SimplifiableIfStatement
             if (super.recognize(awtEvent)) {
                 return (((MouseEvent)awtEvent).getModifiers() & MouseEvent.BUTTON1_MASK) != 0;
             }
@@ -118,83 +116,84 @@ public class EventRecognizerManager {
         }
     }
 
-
     private class MenuClickRecognizer extends MouseClickRecognizer {
         MenuClickRecognizer() {
             super(MouseEvent.MOUSE_PRESSED, JMenuItem.class);
         }
+
 
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             return new GuiEvent(GuiEventType.MENU_CLICK, findSource(awtEvent));
         }
     }
 
-
     private class ButtonClickRecognizer extends MouseClickRecognizer {
         ButtonClickRecognizer() {
             super(MouseEvent.MOUSE_RELEASED, JButton.class);
         }
+
 
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             return new GuiEvent(GuiEventType.BUTTON_CLICK, findSource(awtEvent));
         }
     }
 
-
     private class CheckboxClickRecognizer extends MouseClickRecognizer {
         CheckboxClickRecognizer() {
             super(MouseEvent.MOUSE_CLICKED, JCheckBox.class);
         }
 
+
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             GuiComponent source = findSource(awtEvent);
             boolean value = ((JCheckBox)source.getSwingComponent()).isSelected();
             return new GuiEvent(GuiEventType.CHECKBOX_CLICK, source,
-                (value ? Boolean.TRUE : Boolean.FALSE));
+                                (value ? Boolean.TRUE : Boolean.FALSE));
         }
     }
-
 
     private class TableClickRecognizer extends MouseClickRecognizer {
         TableClickRecognizer() {
             super(MouseEvent.MOUSE_RELEASED, JTable.class);
         }
 
+
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             GuiComponent source = findSource(awtEvent);
             JTable table = (JTable)source.getSwingComponent();
             int rowIdx = table.rowAtPoint(((MouseEvent)awtEvent).getPoint());
-            return new GuiEvent(GuiEventType.TABLE_CLICK, source, new Integer(rowIdx));
+            return new GuiEvent(GuiEventType.TABLE_CLICK, source, rowIdx);
         }
     }
-
 
     private class ListClickRecognizer extends MouseClickRecognizer {
         ListClickRecognizer() {
             super(MouseEvent.MOUSE_RELEASED, JList.class);
         }
 
+
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             GuiComponent source = findSource(awtEvent);
             JList table = (JList)source.getSwingComponent();
             int rowIdx = table.locationToIndex(((MouseEvent)awtEvent).getPoint());
-            return new GuiEvent(GuiEventType.LIST_CLICK, source, new Integer(rowIdx));
+            return new GuiEvent(GuiEventType.LIST_CLICK, source, rowIdx);
         }
     }
 
-
     private class TreeClickRecognizer extends MouseClickRecognizer {
         private GuiEventType eventType;
+
 
         TreeClickRecognizer() {
             this(MouseEvent.MOUSE_CLICKED, JTree.class, GuiEventType.TREE_CLICK);
         }
 
 
-        TreeClickRecognizer(int eventId, Class sourceClass, GuiEventType eventType) {
+        TreeClickRecognizer(int eventId, Class<JTree> sourceClass, GuiEventType eventType) {
             super(eventId, sourceClass);
             this.eventType = eventType;
         }
+
 
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             GuiComponent source = findSource(awtEvent);
@@ -209,11 +208,9 @@ public class EventRecognizerManager {
             TreePath path = tree.getClosestPathForLocation(point.x, point.y);
             boolean collapsed = tree.isCollapsed(path);
             boolean selected = tree.isPathSelected(path);
-            TreeEventData data = new TreeEventData(path, collapsed, selected);
-            return data;
+            return new TreeEventData(path, collapsed, selected);
         }
     }
-
 
     private class TreePreClickRecognizer extends TreeClickRecognizer {
         TreePreClickRecognizer() {
@@ -221,14 +218,14 @@ public class EventRecognizerManager {
         }
     }
 
-
     // ----------------------------------------------------------------------------------
-    // Click Recognizer
+    // Other Recognizers
     // ----------------------------------------------------------------------------------
     private class KeyReleasedRecognizer extends AbstractRecognizer {
         KeyReleasedRecognizer() {
             super(KeyEvent.class, KeyEvent.KEY_RELEASED, JTextComponent.class);
         }
+
 
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             GuiComponent source = findSource(awtEvent);
@@ -237,11 +234,11 @@ public class EventRecognizerManager {
         }
     }
 
-
     private class ComboFocusRecognizer extends AbstractRecognizer {
         ComboFocusRecognizer(int focusType) {
             super(FocusEvent.class, focusType, JComboBox.class);
         }
+
 
         public GuiEvent toGuiEvent(AWTEvent awtEvent) {
             GuiComponent source = findSource(awtEvent);
@@ -252,7 +249,7 @@ public class EventRecognizerManager {
 
         private GuiEventType guiEventType() {
             return (getEventId() == FocusEvent.FOCUS_GAINED)
-            ? GuiEventType.COMBO_FOCUS_GAIN : GuiEventType.COMBO_FOCUS_LOST;
+                   ? GuiEventType.COMBO_FOCUS_GAIN : GuiEventType.COMBO_FOCUS_LOST;
         }
     }
 }

@@ -4,11 +4,8 @@
  * Common Apache License 2.0
  */
 package recorder.gesture;
-import java.awt.Component;
-import java.awt.Container;
-import javax.swing.JButton;
-import javax.swing.JInternalFrame;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.event.GuiEvent;
@@ -16,7 +13,7 @@ import recorder.event.GuiEventList;
 import recorder.event.GuiEventType;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link CloseFrame}.
+
  */
 public class CloseFrameTest extends TestCase {
     private CloseFrame closeGesture;
@@ -24,11 +21,12 @@ public class CloseFrameTest extends TestCase {
     private StatementList statementList;
     private GuiEventList eventList;
 
+
     public void test_simple() throws Exception {
         JInternalFrame frame = new JInternalFrame("my internal frame");
         JButton closeButton = findCloseButton(frame);
         assertNotNull("Impossible de trouver le bouton de fermeture de l'internalFrame",
-            closeButton);
+                      closeButton);
 
         eventList.addEvent(newClickGuiEvent(GuiEventType.BUTTON_CLICK, closeButton));
 
@@ -66,10 +64,11 @@ public class CloseFrameTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         closeGesture = new CloseFrame();
         this.accessibleCloseName =
-            UIManager.getString("InternalFrameTitlePane.closeButtonAccessibleName");
+              UIManager.getString("InternalFrameTitlePane.closeButtonAccessibleName");
         statementList = new StatementList();
         eventList = new GuiEventList();
     }
@@ -86,9 +85,9 @@ public class CloseFrameTest extends TestCase {
         }
 
         Component[] content = frame.getComponents();
-        for (int idx = 0; idx < content.length; idx++) {
-            if (content[idx] instanceof Container) {
-                Container container = (Container)content[idx];
+        for (Component aContent : content) {
+            if (aContent instanceof Container) {
+                Container container = (Container)aContent;
                 JButton close = findCloseButton(container);
                 if (close != null) {
                     return close;
@@ -102,6 +101,6 @@ public class CloseFrameTest extends TestCase {
 
     private boolean isCloseButton(Component frame) {
         return frame.getAccessibleContext() != null
-        && accessibleCloseName.equals(frame.getAccessibleContext().getAccessibleName());
+               && accessibleCloseName.equals(frame.getAccessibleContext().getAccessibleName());
     }
 }

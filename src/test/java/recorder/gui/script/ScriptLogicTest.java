@@ -4,11 +4,10 @@
  * Common Apache License 2.0
  */
 package recorder.gui.script;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JFrame;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import junit.framework.TestCase;
 import recorder.Recorder;
@@ -18,7 +17,7 @@ import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link ScriptLogic}.
+
  */
 public class ScriptLogicTest extends TestCase {
     private ScriptLogic logic;

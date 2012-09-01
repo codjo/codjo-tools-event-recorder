@@ -5,7 +5,7 @@
  */
 package recorder.result;
 /**
- * Résultat d'une gesture.
+ * Result of a gesture.
  */
 public interface Statement {
     boolean isEquivalentTo(Statement stmt);

@@ -4,10 +4,7 @@
  * Common Apache License 2.0
  */
 package recorder.gesture;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
@@ -16,12 +13,13 @@ import recorder.event.GuiEventList;
 import recorder.event.GuiEventType;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link SetValue}.
+
  */
 public class SetValueTest extends TestCase {
     private GuiEventList list;
     private StatementList result;
     private SetValue setValueGesture;
+
 
     public void test_combo() {
         JComboBox field = new JComboBox();
@@ -153,6 +151,7 @@ public class SetValueTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() {
         list = new GuiEventList();
         result = new StatementList();
@@ -161,7 +160,7 @@ public class SetValueTest extends TestCase {
 
 
     private static GuiEvent newGuiEvent(GuiEventType eventType, JComponent source,
-        Object value) {
+                                        Object value) {
         return new GuiEvent(eventType, toGui(source), value);
     }
 

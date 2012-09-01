@@ -4,11 +4,9 @@
  * Common Apache License 2.0
  */
 package recorder;
-import java.awt.AWTEvent;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import recorder.component.GuiComponentFactory;
 import recorder.event.EventRecognizerManager;
@@ -18,7 +16,7 @@ import recorder.gesture.GestureManager;
 import recorder.result.Statement;
 import recorder.result.StatementList;
 /**
- * Enregistre les actions utilisateurs sur les composants nommés.
+ * Record user interaction.
  */
 public class Recorder implements AWTEventListener {
     private GuiEventList simpleEventList = new GuiEventList();
@@ -27,10 +25,12 @@ public class Recorder implements AWTEventListener {
     private final GestureManager gestureManager;
     private final EventRecognizerManager recognizerManager;
 
+
     public Recorder(GuiComponentFactory factory) {
         recognizerManager = new EventRecognizerManager(factory);
         gestureManager = new GestureManager();
     }
+
 
     public void startRecord() {
         Toolkit.getDefaultToolkit().addAWTEventListener(this, Long.MAX_VALUE);
@@ -109,12 +109,14 @@ public class Recorder implements AWTEventListener {
         return recognizerManager.getGuiComponentFactory();
     }
 
+
     private static class RecorderEventSupport {
-        private List listenerList;
+        private List<RecorderListener> listenerList;
+
 
         public void addRecorderListener(RecorderListener listener) {
             if (listenerList == null) {
-                listenerList = new ArrayList();
+                listenerList = new ArrayList<RecorderListener>();
             }
             listenerList.add(listener);
         }
@@ -133,8 +135,7 @@ public class Recorder implements AWTEventListener {
                 return;
             }
 
-            for (Iterator iter = listenerList.iterator(); iter.hasNext();) {
-                RecorderListener listener = (RecorderListener)iter.next();
+            for (RecorderListener listener : listenerList) {
                 listener.recorderUpdate();
             }
         }

@@ -4,25 +4,26 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import recorder.gui.action.GuiAction;
 import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 /**
- * Permet de créer un tag assertTree.
+ * Creates tag assertTree.
  */
 class AssertTree extends AbstractAssert {
     static final String ID = "assertion.tree";
     private AssertContext context;
 
+
     AssertTree(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertTree");
-        putValue(GuiAction.TOOLTIP,
-            "Ajoute un 'assertion' sur l'existance d'un noeud dans un arbre");
+        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur l'existance d'un noeud dans un arbre");
         this.context = assertContext;
     }
+
 
     public void execute() {
         if (!isAllowed()) {
@@ -30,7 +31,7 @@ class AssertTree extends AbstractAssert {
         }
         JTree tree = (JTree)context.getSource();
         TreePath path =
-            tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
+              tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
 
         AttributeList attributes = new AttributeList();
         attributes.put("name", tree.getName());
@@ -41,6 +42,7 @@ class AssertTree extends AbstractAssert {
     }
 
 
+    @Override
     public void update() {
         this.setEnabled(isAllowed());
     }
@@ -52,14 +54,14 @@ class AssertTree extends AbstractAssert {
         }
         JTree tree = (JTree)context.getSource();
         TreePath path =
-            tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
+              tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
 
         return path != null;
     }
 
 
     private static String pathToString(JTree tree, TreePath treePath) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         Object[] path = treePath.getPath();
 

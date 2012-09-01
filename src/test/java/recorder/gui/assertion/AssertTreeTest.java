@@ -4,20 +4,21 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Point;
-import javax.swing.JTextField;
-import javax.swing.JTree;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertTree}.
+
  */
 public class AssertTreeTest extends TestCase {
     private AssertTree assertTree;
     private MockAssertContext context;
 
+
+    @Override
     protected void setUp() throws Exception {
         context = new MockAssertContext();
         assertTree = new AssertTree(context);
@@ -31,7 +32,7 @@ public class AssertTreeTest extends TestCase {
 
     public void test_assert_exists() throws Exception {
         JTree source =
-            buildJTree(new TreePath(new Object[] {"root", "child"}), "treeName");
+              buildJTree(new TreePath(new Object[]{"root", "child"}), "treeName");
 
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
         context.setPoint(new Point(1, 1));
@@ -41,7 +42,7 @@ public class AssertTreeTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertTree name=\"treeName\" path=\"root:child\" exists=\"true\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 
 
@@ -92,11 +93,12 @@ public class AssertTreeTest extends TestCase {
 
     private JTree buildJTree(final TreePath currentPath, String name) {
         JTree tree =
-            new JTree() {
-                public TreePath getClosestPathForLocation(int x, int y) {
-                    return currentPath;
-                }
-            };
+              new JTree() {
+                  @Override
+                  public TreePath getClosestPathForLocation(int x, int y) {
+                      return currentPath;
+                  }
+              };
         tree.setName(name);
         return tree;
     }

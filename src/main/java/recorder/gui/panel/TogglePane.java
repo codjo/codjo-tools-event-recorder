@@ -9,35 +9,25 @@
  * Terms of license - http://opensource.org/licenses/apachepl.php
  */
 package recorder.gui.panel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JToggleButton;
+import javax.swing.*;
 /**
- * Un composant similaire à un {@link javax.swing.JTabbedPane} mais utilisant des {@link
- * javax.swing.JToggleButton} comme onglet.
+ * GUI Component quite similar to {@link javax.swing.JTabbedPane} but using {@link javax.swing.JToggleButton} to switch between JPanel.
  */
 public class TogglePane extends JPanel {
     private JPanel buttonPanel = new JPanel();
     private JSplitPane splitPane = new LightSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-    private TogglePaneControler controler;
-    private Map lastPositionByTabPanel = new WeakHashMap();
+    private TogglePaneController controller;
+    private Map<Component, Integer> lastPositionByTabPanel = new WeakHashMap<Component, Integer>();
     private JComponent togglePaneContent;
+
 
     public TogglePane() {
         super(new BorderLayout());
-        controler = new TogglePaneControler(this);
+        controller = new TogglePaneController(this);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -47,8 +37,9 @@ public class TogglePane extends JPanel {
         splitPane.setName("TogglePane.split");
     }
 
+
     public void addTab(String title, final Component component) {
-        controler.addTabDescription(new TabDescritpion(title, component));
+        controller.addTabDescription(new TabDescription(title, component));
     }
 
 
@@ -63,7 +54,7 @@ public class TogglePane extends JPanel {
 
 
     private void updateGui() {
-        if (controler.isNothingSelected()) {
+        if (controller.isNothingSelected()) {
             remove(splitPane);
             if (togglePaneContent != null) {
                 add(togglePaneContent, BorderLayout.CENTER);
@@ -78,8 +69,8 @@ public class TogglePane extends JPanel {
 
 
     private void addButton(JToggleButton button) {
-        button.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(
-                    Color.gray), BorderFactory.createEmptyBorder(2, 5, 2, 5)));
+        button.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.gray),
+                                                            BorderFactory.createEmptyBorder(2, 5, 2, 5)));
 
         buttonPanel.add(button);
     }
@@ -87,7 +78,7 @@ public class TogglePane extends JPanel {
 
     private void displayTab(Component component) {
         Component previousDisplayedTab = splitPane.getBottomComponent();
-        lastPositionByTabPanel.put(previousDisplayedTab, new Integer(splitPane.getDividerLocation()));
+        lastPositionByTabPanel.put(previousDisplayedTab, splitPane.getDividerLocation());
 
         splitPane.setBottomComponent(component);
 
@@ -101,7 +92,7 @@ public class TogglePane extends JPanel {
 
     private int determineDividerLocation(Component component) {
         if (lastPositionByTabPanel.containsKey(component)) {
-            return ((Integer)lastPositionByTabPanel.get(component)).intValue();
+            return lastPositionByTabPanel.get(component);
         }
         else {
             int realHeight = getHeight() - splitPane.getDividerSize() - buttonPanel.getHeight();
@@ -113,15 +104,18 @@ public class TogglePane extends JPanel {
         }
     }
 
+
     // Inner Class -----------------------------------------------------------------------------------------------------
-    private static class TabDescritpion {
+    private static class TabDescription {
         private Component component;
         private JToggleButton button;
 
-        TabDescritpion(String title, Component component) {
+
+        TabDescription(String title, Component component) {
             this.component = component;
             button = new JToggleButton(title);
         }
+
 
         public JToggleButton getButton() {
             return button;
@@ -133,37 +127,38 @@ public class TogglePane extends JPanel {
         }
     }
 
-
     private static class TabModel {
-        private Map tabMap = new HashMap();
+        private Map<ButtonModel, TabDescription> tabMap = new HashMap<ButtonModel, TabDescription>();
 
-        void add(TabDescritpion tabDescritpion) {
-            tabMap.put(tabDescritpion.getButton().getModel(), tabDescritpion);
+
+        void add(TabDescription tabDescription) {
+            tabMap.put(tabDescription.getButton().getModel(), tabDescription);
         }
 
 
-        TabDescritpion getDescription(ButtonModel model) {
-            return (TabDescritpion)tabMap.get(model);
+        TabDescription getDescription(ButtonModel model) {
+            return tabMap.get(model);
         }
     }
 
-
-    private static class TogglePaneControler extends ButtonGroup {
+    private static class TogglePaneController extends ButtonGroup {
         private JToggleButton nothingSelected = new JToggleButton();
         private TabModel tabModel;
         private TogglePane gui;
 
-        TogglePaneControler(TogglePane togglePane) {
+
+        TogglePaneController(TogglePane togglePane) {
             this.gui = togglePane;
             this.tabModel = new TabModel();
             nothingSelected.setSelected(true);
             add(nothingSelected);
         }
 
-        void addTabDescription(TabDescritpion tabDescritpion) {
-            tabModel.add(tabDescritpion);
-            this.add(tabDescritpion.getButton());
-            gui.addButton(tabDescritpion.getButton());
+
+        void addTabDescription(TabDescription tabDescription) {
+            tabModel.add(tabDescription);
+            this.add(tabDescription.getButton());
+            gui.addButton(tabDescription.getButton());
         }
 
 
@@ -172,6 +167,7 @@ public class TogglePane extends JPanel {
         }
 
 
+        @Override
         public void setSelected(ButtonModel model, boolean isSelected) {
             if (!isSelected && model == getSelection()) {
                 nothingSelected.setSelected(true);

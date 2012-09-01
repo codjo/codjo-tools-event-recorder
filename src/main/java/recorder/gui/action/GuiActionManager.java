@@ -7,11 +7,9 @@ package recorder.gui.action;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-/**
- * Manager d'action.
- */
 public class GuiActionManager {
-    private Map storage = new HashMap();
+    private Map<Object, GuiAction> storage = new HashMap<Object, GuiAction>();
+
 
     public void declare(GuiAction action) {
         storage.put(action.getValue(GuiAction.ACTION_ID), action);
@@ -19,11 +17,11 @@ public class GuiActionManager {
 
 
     public GuiAction getAction(String actionId) {
-        return (GuiAction)storage.get(actionId);
+        return storage.get(actionId);
     }
 
 
-    public Iterator actions() {
+    public Iterator<GuiAction> actions() {
         return storage.values().iterator();
     }
 }

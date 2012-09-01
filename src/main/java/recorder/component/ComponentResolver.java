@@ -4,23 +4,17 @@
  * Common Apache License 2.0
  */
 package recorder.component;
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Recherche le véritable composant swing sous-jacent.
- * 
- * <p>
- * Certains composants swing, comme par exemple JComboBox, sont composés de plusieurs
- * sous composants.
- * </p>
+ * Find the real underneath Swing component.
+ *
+ * <p> Some Swing components are composed of more basic components : JComboBox is a good example. </p>
  */
 class ComponentResolver {
     private String ignoredContainer;
+
 
     public JComponent find(MouseEvent event) {
         return findImpl(event.getSource(), event.getPoint());

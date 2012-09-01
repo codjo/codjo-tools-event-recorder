@@ -8,15 +8,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.JSplitPane;
+import javax.swing.*;
 
-/**
- */
 public class SplitPaneSizer {
     private JSplitPane content;
     private Limit min = new ProportionalLimit(0);
     private Limit max = new ProportionalLimit(1);
     private DividerLocationListener listener = new DividerLocationListener();
+
 
     public SplitPaneSizer(JSplitPane content, double min, double max) {
         this.content = content;
@@ -33,6 +32,7 @@ public class SplitPaneSizer {
         ensureLocationLimit();
     }
 
+
     public void start() {
         content.addComponentListener(listener);
         content.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, listener);
@@ -42,7 +42,7 @@ public class SplitPaneSizer {
     public void stop() {
         content.removeComponentListener(listener);
         content.removePropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY,
-            listener);
+                                             listener);
     }
 
 
@@ -71,6 +71,7 @@ public class SplitPaneSizer {
         }
     }
 
+
     private static interface Limit {
         public int determineLimit(int componentSize);
     }
@@ -78,34 +79,33 @@ public class SplitPaneSizer {
     private static class ProportionalLimit implements Limit {
         private double limit = 0;
 
+
         ProportionalLimit(double limit) {
             this.limit = limit;
         }
+
 
         public int determineLimit(int componentSize) {
             return (int)(componentSize * limit);
         }
     }
 
-
     private static class FixLimit implements Limit {
         private int limit = 0;
+
 
         FixLimit(int limit) {
             this.limit = limit;
         }
+
 
         public int determineLimit(int componentSize) {
             return limit;
         }
     }
 
-
-    /**
-     * Ecoute les changements sur le 'divider'..
-     */
-    private class DividerLocationListener extends ComponentAdapter
-        implements PropertyChangeListener {
+    private class DividerLocationListener extends ComponentAdapter implements PropertyChangeListener {
+        @Override
         public void componentResized(ComponentEvent event) {
             ensureLocationLimit();
         }

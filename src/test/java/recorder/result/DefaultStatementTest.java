@@ -6,7 +6,7 @@
 package recorder.result;
 import junit.framework.TestCase;
 /**
- * Classe de test de {@link recorder.result.DefaultStatement}.
+
  */
 public class DefaultStatementTest extends TestCase {
     public void test_order() throws Exception {
@@ -35,10 +35,10 @@ public class DefaultStatementTest extends TestCase {
         assertTrue("Egalité", aDefault.isEquivalentTo(sameDefault));
 
         assertFalse("Tag différent",
-            aDefault.isEquivalentTo(new DefaultStatement("different", attributes)));
+                    aDefault.isEquivalentTo(new DefaultStatement("different", attributes)));
 
         assertFalse("Attribut différent",
-            aDefault.isEquivalentTo(new DefaultStatement("ee", AttributeList.EMPTY_LIST)));
+                    aDefault.isEquivalentTo(new DefaultStatement("ee", AttributeList.EMPTY_LIST)));
 
         assertFalse("Objet null", aDefault.isEquivalentTo(null));
     }

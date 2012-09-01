@@ -4,23 +4,21 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Point;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import java.awt.*;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertSelected}.
+
  */
 public class AssertSelectedTest extends TestCase {
     private static final int SELECTED_ROW = 1;
     private AssertSelected assertSelected;
     private MockAssertContext context;
 
+
+    @Override
     protected void setUp() throws Exception {
         context = new MockAssertContext();
         assertSelected = new AssertSelected(context);
@@ -47,7 +45,7 @@ public class AssertSelectedTest extends TestCase {
 
 
     private void assertSelectedTest(JComponent source, ListSelectionModel selectionModel,
-        String name) {
+                                    String name) {
         selectionModel.setSelectionInterval(SELECTED_ROW, SELECTED_ROW);
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
         context.setPoint(new Point(1, 1));
@@ -57,7 +55,7 @@ public class AssertSelectedTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini pour " + name, resultAssert);
         assertEquals("<assertSelected name=\"" + name + "\" row=\"" + SELECTED_ROW
-            + "\"/>", resultAssert.toXml());
+                     + "\"/>", resultAssert.toXml());
     }
 
 
@@ -73,7 +71,7 @@ public class AssertSelectedTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertSelected name=\"Ma table\" row=\"2\" expected=\"false\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 
 
@@ -119,11 +117,12 @@ public class AssertSelectedTest extends TestCase {
 
     private JTable buildJTable(final int rowAtPoint, String name) {
         JTable source =
-            new JTable(3, 2) {
-                public int rowAtPoint(Point point) {
-                    return rowAtPoint;
-                }
-            };
+              new JTable(3, 2) {
+                  @Override
+                  public int rowAtPoint(Point point) {
+                      return rowAtPoint;
+                  }
+              };
         source.setName(name);
         return source;
     }
@@ -131,11 +130,12 @@ public class AssertSelectedTest extends TestCase {
 
     private JList buildJList(final int rowAtPoint, String name) {
         JList list =
-            new JList() {
-                public int locationToIndex(Point point) {
-                    return rowAtPoint;
-                }
-            };
+              new JList() {
+                  @Override
+                  public int locationToIndex(Point point) {
+                      return rowAtPoint;
+                  }
+              };
         list.setName(name);
         return list;
     }

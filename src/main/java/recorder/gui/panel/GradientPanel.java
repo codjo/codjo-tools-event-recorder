@@ -4,20 +4,10 @@
  * Common Apache License 2.0
  */
 package recorder.gui.panel;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.LayoutManager;
-import java.awt.Paint;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 /**
- * Panneau avec un dégradé en fond.
- * 
- * <p>
- * Utilise les couleurs 'control' définit dans le UIManager avec le background.
- * </p>
+ * <p> Use 'control' color defined in the UIManager. </p>
  */
 public class GradientPanel extends JPanel {
     public GradientPanel() {
@@ -36,6 +26,8 @@ public class GradientPanel extends JPanel {
         setBackground(UIManager.getColor("InternalFrame.activeTitleBackground"));
     }
 
+
+    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         if (!isOpaque()) {

@@ -7,10 +7,11 @@ package recorder.result;
 import java.util.Iterator;
 import junit.framework.TestCase;
 /**
- * Classe de test de {@link AttributeList}.
+
  */
 public class AttributeListTest extends TestCase {
     private AttributeList list;
+
 
     public void test_singleton() throws Exception {
         list = AttributeList.singleton("arg", "value");
@@ -35,9 +36,9 @@ public class AttributeListTest extends TestCase {
         assertEquals("hashCode", list.hashCode(), sameList.hashCode());
 
         assertFalse("Value différent",
-            list.equals(AttributeList.singleton("key1", "different")));
+                    list.equals(AttributeList.singleton("key1", "different")));
         assertFalse("Tag différent",
-            list.equals(AttributeList.singleton("different", "val1")));
+                    list.equals(AttributeList.singleton("different", "val1")));
     }
 
 
@@ -76,6 +77,7 @@ public class AttributeListTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         list = new AttributeList();
     }

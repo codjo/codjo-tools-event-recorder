@@ -4,15 +4,11 @@
  * Common Apache License 2.0
  */
 package recorder;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
@@ -24,13 +20,14 @@ import recorder.result.DefaultStatement;
 import recorder.result.Statement;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link Recorder}.
+
  */
 public class RecorderTest extends TestCase {
     private Recorder recorder;
 
+
     public void test_simplifiedEvent_setValue_combo() {
-        JComboBox field = new JComboBox(new String[] {"la", "lb"});
+        JComboBox field = new JComboBox(new String[]{"la", "lb"});
         field.setName("myfield");
         field.setSelectedItem("la");
 
@@ -42,12 +39,12 @@ public class RecorderTest extends TestCase {
         recorder.eventDispatched(newFocus(field, FocusEvent.FOCUS_LOST));
 
         GuiEventList list = recorder.getSimpleEventList();
-        assertEquals("Les events sont consommés immédiatement", 0, list.size());
+        assertEquals("Les events sont consommÈs immÈdiatement", 0, list.size());
 
         assertEquals(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN, toGui(field), "la"),
-            list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN, null)));
+                     list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN, null)));
         assertEquals(new GuiEvent(GuiEventType.COMBO_FOCUS_LOST, toGui(field), "lb"),
-            list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_LOST, null)));
+                     list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_LOST, null)));
     }
 
 
@@ -98,8 +95,8 @@ public class RecorderTest extends TestCase {
         recorder.postGestureResult(statement);
 
         assertEquals("Le listener est prevenu", 1, listener.eventRecognizedCalled);
-        assertSame("Le result est ajouté", statement,
-            recorder.getGestureResultList().lastResult());
+        assertSame("Le result est ajoutÈ", statement,
+                   recorder.getGestureResultList().lastResult());
     }
 
 
@@ -112,17 +109,17 @@ public class RecorderTest extends TestCase {
         recorder.eventDispatched(newKey(buildValidTextField(), KeyEvent.KEY_RELEASED, 'e'));
 
         assertEquals("Event released est reconnu : listener1", 1,
-            listener.eventRecognizedCalled);
+                     listener.eventRecognizedCalled);
         assertEquals("Event released est reconnu : listener2", 1,
-            listener2.eventRecognizedCalled);
+                     listener2.eventRecognizedCalled);
 
         recorder.removeRecorderListener(listener2);
         recorder.eventDispatched(newKey(buildValidTextField(), KeyEvent.KEY_RELEASED, 'e'));
 
         assertEquals("Event released est reconnu : listener1", 2,
-            listener.eventRecognizedCalled);
+                     listener.eventRecognizedCalled);
         assertEquals("Event released est reconnu : listener2", 1,
-            listener2.eventRecognizedCalled);
+                     listener2.eventRecognizedCalled);
     }
 
 
@@ -151,6 +148,7 @@ public class RecorderTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         recorder = new Recorder(new GuiComponentFactory());
     }
@@ -183,8 +181,10 @@ public class RecorderTest extends TestCase {
         return GuiComponentFactory.newGuiComponent(field);
     }
 
+
     private static class MockRecorderListener implements RecorderListener {
         int eventRecognizedCalled = 0;
+
 
         public void recorderUpdate() {
             eventRecognizedCalled++;

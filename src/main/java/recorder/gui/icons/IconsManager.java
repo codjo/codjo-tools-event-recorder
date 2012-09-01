@@ -4,10 +4,7 @@
  * Common Apache License 2.0
  */
 package recorder.gui.icons;
-import javax.swing.ImageIcon;
-/**
- * Manager des icones.
- */
+import javax.swing.*;
 public final class IconsManager {
     public static final IconId RECORD_START = new IconId("Irecord.start.png");
     public static final IconId RECORD_STOP = new IconId("Irecord.stop.png");
@@ -19,26 +16,19 @@ public final class IconsManager {
     public static final IconId HIGHLIGHT_STOP = new IconId("Ihighlight.stop.png");
     public static final IconId REMOVE_LAST = new IconId("Iscript.clear.last.png");
 
-    private IconsManager() {}
+
+    private IconsManager() {
+    }
+
 
     public static ImageIcon getIcon(IconId iconId) {
         return new ImageIcon(IconsManager.class.getResource(iconId.fileName));
     }
 
-//    public static ImageIcon getDisabledIcon(IconId iconId) {
-//        return null;
-//    }
-//
-//
-//    public static void putIconsInto(AbstractButton button, IconId iconId) {
-//        button.setIcon(getIcon(iconId));
-//        button.setDisabledIcon(getDisabledIcon(iconId));
-//    }
-    /**
-     * Represente un ID permettant d'identifier un icone.
-     */
+
     public static class IconId {
         private String fileName;
+
 
         IconId(String fileName) {
             this.fileName = fileName;

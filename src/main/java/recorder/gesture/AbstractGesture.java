@@ -9,20 +9,18 @@ import recorder.event.GuiEvent;
 import recorder.event.GuiEventList;
 import recorder.event.GuiEventType;
 import recorder.result.StatementList;
-/**
- * Classe facilitant l'implantation d'un Gesture.
- */
 abstract class AbstractGesture implements Gesture {
     private final GuiEventType[] handledType;
     private final FindStrategyId[] findStrategyId;
 
+
     protected AbstractGesture(GuiEventType type, FindStrategyId findStrategyId) {
-        this(new GuiEventType[] {type}, findStrategyId);
+        this(new GuiEventType[]{type}, findStrategyId);
     }
 
 
     protected AbstractGesture(GuiEventType[] type, FindStrategyId findStrategyId) {
-        this(type, new FindStrategyId[] {findStrategyId});
+        this(type, new FindStrategyId[]{findStrategyId});
     }
 
 
@@ -30,6 +28,7 @@ abstract class AbstractGesture implements Gesture {
         this.handledType = type;
         this.findStrategyId = findStrategyId;
     }
+
 
     public final void receive(GuiEventList eventList, StatementList resultList) {
         if (!canHandleEvent(eventList.peek())) {
@@ -44,6 +43,7 @@ abstract class AbstractGesture implements Gesture {
         if (!canHandleEventType(event)) {
             return false;
         }
+        //noinspection RedundantIfStatement
         if (!canHandleFindStrategy(event)) {
             return false;
         }
@@ -52,8 +52,7 @@ abstract class AbstractGesture implements Gesture {
 
 
     private boolean canHandleEventType(GuiEvent event) {
-        for (int idx = 0; idx < handledType.length; idx++) {
-            GuiEventType type = handledType[idx];
+        for (GuiEventType type : handledType) {
             if (type.equals(event.getType())) {
                 return true;
             }
@@ -63,8 +62,7 @@ abstract class AbstractGesture implements Gesture {
 
 
     private boolean canHandleFindStrategy(GuiEvent event) {
-        for (int idx = 0; idx < findStrategyId.length; idx++) {
-            FindStrategyId strategy = findStrategyId[idx];
+        for (FindStrategyId strategy : findStrategyId) {
             if (event.getSource().canBeFoundWith(strategy)) {
                 return true;
             }

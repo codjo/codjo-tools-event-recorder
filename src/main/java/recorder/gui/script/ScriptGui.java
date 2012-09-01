@@ -4,7 +4,7 @@
  * Common Apache License 2.0
  */
 package recorder.gui.script;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -13,10 +13,11 @@ import javax.swing.tree.TreePath;
 import recorder.result.Statement;
 import recorder.result.StatementList;
 /**
- * Représentation sous forme d'arbre d'un script.
+ * Represents a test script using a JTree.
  */
 public class ScriptGui extends JTree {
     private StatementTreeModel myModel;
+
 
     public ScriptGui() {
         myModel = new StatementTreeModel(new StatementList());
@@ -25,8 +26,10 @@ public class ScriptGui extends JTree {
         setRootVisible(false);
     }
 
+
+    @Override
     public String convertValueToText(Object value, boolean selected, boolean expanded,
-        boolean leaf, int row, boolean hasFocus) {
+                                     boolean leaf, int row, boolean hasFocus) {
         if (value instanceof StatementList) {
             return "group";
         }
@@ -42,20 +45,23 @@ public class ScriptGui extends JTree {
         myModel.setRoot(statementList);
         if (statementList.lastResult() != null) {
             this.scrollPathToVisible(new TreePath(
-                    new Object[] {statementList, statementList.lastResult()}));
+                  new Object[]{statementList, statementList.lastResult()}));
         }
     }
 
+
     /**
-     * TreeModel mappant un StatementList.
+     * A TreeModel for a StatementList.
      */
     private static class StatementTreeModel implements TreeModel {
         private StatementList root;
         private EventListenerList listenerList = new EventListenerList();
 
+
         StatementTreeModel(StatementList root) {
             this.root = root;
         }
+
 
         public Object getRoot() {
             return root;
@@ -68,24 +74,13 @@ public class ScriptGui extends JTree {
         }
 
 
-        private String toXml(Object obj) {
-            if (obj instanceof StatementList) {
-                return "LIST";
-            }
-
-            return ((Statement)obj).toXml() + " " + System.identityHashCode(obj);
-        }
-
-
         public Object getChild(Object parent, int index) {
-            Statement child = ((StatementList)parent).get(index);
-            return child;
+            return ((StatementList)parent).get(index);
         }
 
 
         public int getChildCount(Object parent) {
-            int size = ((StatementList)parent).size();
-            return size;
+            return ((StatementList)parent).size();
         }
 
 
@@ -100,8 +95,7 @@ public class ScriptGui extends JTree {
 
 
         public int getIndexOfChild(Object parent, Object child) {
-            int index = findIndex(parent, child);
-            return index;
+            return findIndex(parent, child);
         }
 
 
@@ -128,7 +122,7 @@ public class ScriptGui extends JTree {
 
         protected void fireTreeStructureChanged(Statement oldRoot) {
             Object[] listeners = listenerList.getListenerList();
-            TreeModelEvent event = new TreeModelEvent(this, new Object[] {oldRoot});
+            TreeModelEvent event = new TreeModelEvent(this, new Object[]{oldRoot});
 
             for (int i = listeners.length - 2; i >= 0; i -= 2) {
                 ((TreeModelListener)listeners[i + 1]).treeStructureChanged(event);

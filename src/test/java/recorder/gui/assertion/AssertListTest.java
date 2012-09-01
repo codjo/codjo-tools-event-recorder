@@ -4,16 +4,14 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertList}.
+
  */
 public class AssertListTest extends TestCase {
     private static final int ROW = 1;
@@ -21,6 +19,8 @@ public class AssertListTest extends TestCase {
     private AssertList assertList;
     private MockAssertContext context;
 
+
+    @Override
     protected void setUp() throws Exception {
         context = new MockAssertContext();
         assertList = new AssertList(context);
@@ -48,7 +48,7 @@ public class AssertListTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini pour " + name, resultAssert);
         assertEquals("<assertList name=\"" + name + "\" expected=\"" + VALUE
-            + "\" row=\"" + ROW + "\"/>", resultAssert.toXml());
+                     + "\" row=\"" + ROW + "\"/>", resultAssert.toXml());
     }
 
 
@@ -93,11 +93,12 @@ public class AssertListTest extends TestCase {
         content[rowAtPoint] = value;
 
         JList list =
-            new JList(content) {
-                public int locationToIndex(Point point) {
-                    return rowAtPoint;
-                }
-            };
+              new JList(content) {
+                  @Override
+                  public int locationToIndex(Point point) {
+                      return rowAtPoint;
+                  }
+              };
         list.setName(name);
         return list;
     }

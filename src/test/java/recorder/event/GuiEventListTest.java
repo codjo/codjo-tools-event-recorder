@@ -4,17 +4,16 @@
  * Common Apache License 2.0
  */
 package recorder.event;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 /**
- * Classe de test de {@link GuiEventList}.
+
  */
 public class GuiEventListTest extends TestCase {
     private GuiEventList list;
+
 
     public void test_findPrevious() throws Exception {
         GuiComponent srcA = toGui(new JTextField());
@@ -33,7 +32,7 @@ public class GuiEventListTest extends TestCase {
         list.pop();
 
         assertEquals(eventC,
-            list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, srcA)));
+                     list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, srcA)));
         assertEquals(eventA, list.findPrevious(new GuiEvent(GuiEventType.KEY, srcA)));
 
         assertEquals(eventC, list.findPrevious(new GuiEvent(null, srcA)));
@@ -44,7 +43,7 @@ public class GuiEventListTest extends TestCase {
 
 
     public void test_findPrevious_notSameInstance()
-            throws Exception {
+          throws Exception {
         JTextField swingA = new JTextField();
         GuiComponent compA = toGui(swingA);
         GuiComponent sameCompA = toGui(swingA);
@@ -59,7 +58,7 @@ public class GuiEventListTest extends TestCase {
         list.pop();
 
         assertEquals(eventC,
-            list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, sameCompA)));
+                     list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, sameCompA)));
     }
 
 
@@ -68,14 +67,14 @@ public class GuiEventListTest extends TestCase {
         GuiEvent event = new GuiEvent(GuiEventType.BUTTON_CLICK, null);
         list.addEvent(event);
         assertSame("liste non vide : peek renvoie le sommet de la pile", event,
-            list.peek());
+                   list.peek());
         list.pop();
         assertNull("liste de nouveau vide : peek renvoie null", list.peek());
     }
 
 
     public void test_consumedEvent_sizeLimit_default()
-            throws Exception {
+          throws Exception {
         assertEquals(100, list.getConsumedEventLimit());
     }
 
@@ -96,10 +95,11 @@ public class GuiEventListTest extends TestCase {
         list.pop();
 
         assertNull("La liste à atteint sa limite de 2 (l’évènement à disparu)",
-            list.findPrevious(new GuiEvent(null, event1.getSource())));
+                   list.findPrevious(new GuiEvent(null, event1.getSource())));
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         list = new GuiEventList();
     }

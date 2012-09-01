@@ -4,19 +4,8 @@
  * Common Apache License 2.0
  */
 package recorder.gui;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JToolBar;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 import recorder.gui.action.ActionViewUtil;
@@ -27,7 +16,7 @@ import recorder.gui.panel.TogglePane;
 import recorder.gui.script.ScriptGui;
 import recorder.result.StatementList;
 /**
- * IHM du recorder.
+ * Recorder GUI.
  */
 public class RecorderGui extends JPanel {
     private static final Insets NO_INSETS = new Insets(0, 0, 0, 0);
@@ -43,6 +32,7 @@ public class RecorderGui extends JPanel {
     private JTextArea hierarchy;
     private JTextArea logArea;
     private ScriptGui scriptGui = new ScriptGui();
+
 
     public RecorderGui() {
         super(new BorderLayout());
@@ -63,6 +53,7 @@ public class RecorderGui extends JPanel {
         global.addTab("Structure", buildHierarchyResult());
         add(global, BorderLayout.CENTER);
     }
+
 
     public ScriptGui getScriptGui() {
         return scriptGui;
@@ -200,7 +191,7 @@ public class RecorderGui extends JPanel {
         bar.setMargin(NO_INSETS);
 
         return new TitledPanel(IconsManager.getIcon(IconsManager.SCRIPT), "Script de test", bar,
-            scroll);
+                               scroll);
     }
 
 
@@ -221,7 +212,7 @@ public class RecorderGui extends JPanel {
         bar.setMargin(NO_INSETS);
 
         return new TitledPanel(IconsManager.getIcon(IconsManager.HIERARCHY), "Structure", bar,
-            scroll);
+                               scroll);
     }
 
 

@@ -4,11 +4,7 @@
  * Common Apache License 2.0
  */
 package recorder.gesture;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
@@ -18,16 +14,17 @@ import recorder.event.GuiEventType;
 import recorder.event.TreeEventData;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link SelectRow}.
+
  */
 public class SelectRowTest extends TestCase {
     private StatementList result;
     private GuiEventList list;
     private SelectRow selectRowGesture;
 
+
     public void test_receive_badEvent() throws Exception {
         list.addEvent(new GuiEvent(GuiEventType.BUTTON_CLICK,
-                GuiComponentFactory.newGuiComponent(new JButton())));
+                                   GuiComponentFactory.newGuiComponent(new JButton())));
 
         selectRowGesture.receive(list, result);
 
@@ -89,10 +86,11 @@ public class SelectRowTest extends TestCase {
 
         assertEquals("Click est consommé", 0, list.size());
         assertEquals("<select name=\"table.name\" row=\"1\"/>\n"
-            + "<select name=\"table.name\" row=\"2\"/>", result.toXml());
+                     + "<select name=\"table.name\" row=\"2\"/>", result.toXml());
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         result = new StatementList();
         list = new GuiEventList();
@@ -102,26 +100,26 @@ public class SelectRowTest extends TestCase {
 
     private GuiEvent newTableClickRowEvent(String name, String idx) {
         return new GuiEvent(GuiEventType.TABLE_CLICK,
-            GuiComponentFactory.newGuiComponent(buildTable(name)), Integer.decode(idx));
+                            GuiComponentFactory.newGuiComponent(buildTable(name)), Integer.decode(idx));
     }
 
 
     private GuiEvent newTreeClickRowEvent(String name, TreePath path, boolean selected) {
         return new GuiEvent(GuiEventType.TREE_CLICK,
-            GuiComponentFactory.newGuiComponent(buildTree(name)),
-            new TreeEventData(path, false, selected));
+                            GuiComponentFactory.newGuiComponent(buildTree(name)),
+                            new TreeEventData(path, false, selected));
     }
 
 
     private GuiEvent newListClickRowEvent(String name, String idx) {
         return new GuiEvent(GuiEventType.LIST_CLICK,
-            GuiComponentFactory.newGuiComponent(buildList(name)), Integer.decode(idx));
+                            GuiComponentFactory.newGuiComponent(buildList(name)), Integer.decode(idx));
     }
 
 
     private GuiEvent newClickRowEvent(JComponent source, String idx) {
         return new GuiEvent(GuiEventType.TABLE_CLICK,
-            GuiComponentFactory.newGuiComponent(source), Integer.decode(idx));
+                            GuiComponentFactory.newGuiComponent(source), Integer.decode(idx));
     }
 
 
@@ -133,9 +131,9 @@ public class SelectRowTest extends TestCase {
 
 
     private JList buildList(String name) {
-        JList list = new JList();
-        list.setName(name);
-        return list;
+        JList newList = new JList();
+        newList.setName(name);
+        return newList;
     }
 
 

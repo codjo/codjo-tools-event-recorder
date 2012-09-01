@@ -4,11 +4,8 @@
  * Common Apache License 2.0
  */
 package recorder.gesture;
-import java.awt.Component;
-import java.awt.Container;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
+import java.awt.*;
+import javax.swing.*;
 import recorder.component.FindStrategyId;
 import recorder.event.GuiEvent;
 import recorder.event.GuiEventList;
@@ -17,13 +14,15 @@ import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 import recorder.result.StatementList;
 /**
- * Reconnaît une selection dans un menu.
+ * Detect the selection of a menu.
  */
 class ClickMenu extends AbstractGesture {
     ClickMenu() {
         super(GuiEventType.MENU_CLICK, FindStrategyId.BY_LABEL);
     }
 
+
+    @Override
     protected void receiveImpl(GuiEventList list, StatementList resultList) {
         GuiEvent event = list.peek();
 
@@ -32,21 +31,21 @@ class ClickMenu extends AbstractGesture {
 
             final JMenuItem item = (JMenuItem)event.getSource().getSwingComponent();
 
-            String menuPath = builldMenuPath(item.getParent());
+            String menuPath = buildMenuPath(item.getParent());
 
             resultList.add(new DefaultStatement("click",
-                    AttributeList.singleton("menu", menuPath + item.getText())));
+                                                AttributeList.singleton("menu", menuPath + item.getText())));
         }
     }
 
 
-    private String builldMenuPath(Container parent) {
+    private String buildMenuPath(Container parent) {
         if (parent != null && (parent instanceof JPopupMenu)) {
             Component invoker = ((JPopupMenu)parent).getInvoker();
 
             if (invoker != null && invoker instanceof JMenu) {
-                return builldMenuPath(invoker.getParent()) + ((JMenu)invoker).getText()
-                + ":";
+                return buildMenuPath(invoker.getParent()) + ((JMenu)invoker).getText()
+                       + ":";
             }
         }
 
@@ -56,8 +55,8 @@ class ClickMenu extends AbstractGesture {
 
     private boolean invokedFromMenuBar(GuiEvent event) {
         final JMenuItem item = (JMenuItem)event.getSource().getSwingComponent();
-        JPopupMenu popupMenu = (JPopupMenu)item.getParent();
+        JPopupMenu menu = (JPopupMenu)item.getParent();
 
-        return popupMenu.getInvoker() instanceof JMenu;
+        return menu.getInvoker() instanceof JMenu;
     }
 }

@@ -4,20 +4,19 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertValue}.
+
  */
 public class AssertValueTest extends TestCase {
     private AssertValue assertValue;
     private MockAssertContext context;
 
+
+    @Override
     protected void setUp() throws Exception {
         context = new MockAssertContext();
         assertValue = new AssertValue(context);
@@ -40,7 +39,7 @@ public class AssertValueTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertValue name=\"Mon textField\" expected=\"Ma valeur\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 
 
@@ -56,12 +55,12 @@ public class AssertValueTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertValue name=\"Mon textField\" expected=\"true\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 
 
     public void test_assert_value_jComboBox() throws Exception {
-        JComboBox source = new JComboBox(new String[] {"Val1", "Val2"});
+        JComboBox source = new JComboBox(new String[]{"Val1", "Val2"});
         source.setSelectedItem("Val2");
         source.setName("Mon comboBox");
 
@@ -72,7 +71,7 @@ public class AssertValueTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertValue name=\"Mon comboBox\" expected=\"Val2\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 
 
@@ -104,7 +103,7 @@ public class AssertValueTest extends TestCase {
         assertValue.update();
 
         assertFalse("Assert disabled (car composant non trouvable)",
-            assertValue.isEnabled());
+                    assertValue.isEnabled());
 
         source.setName("bobo");
         assertValue.update();

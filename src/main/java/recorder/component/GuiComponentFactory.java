@@ -4,14 +4,15 @@
  * Common Apache License 2.0
  */
 package recorder.component;
-import java.awt.AWTEvent;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Retour le composant 'sémantique' associé à l'event.
+ * Creates the 'semantic' representation of the gui component linked to the event.
  */
 public class GuiComponentFactory {
     private final ComponentResolver resolver = new ComponentResolver();
+
 
     public GuiComponent find(Object source) {
         return toGuiComponent(resolver.find(source));

@@ -4,17 +4,15 @@
  * Common Apache License 2.0
  */
 package recorder.gui.util;
-import java.awt.AWTEvent;
-import java.awt.Color;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
+import javax.swing.*;
 import recorder.component.FindStrategyId;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 /**
- * Highlight le composant survolé par la souris.
+ * Highlight the GUI Component found beneath the mouse.
  */
 public class ComponentHighlighter implements AWTEventListener {
     static final Color FIND_BY_NAME_COLOR = Color.green;
@@ -25,6 +23,7 @@ public class ComponentHighlighter implements AWTEventListener {
     private JComponent prevComponent;
     private HighlightListener listener;
 
+
     public ComponentHighlighter() {
         this(new GuiComponentFactory());
     }
@@ -34,10 +33,11 @@ public class ComponentHighlighter implements AWTEventListener {
         this.factory = factory;
     }
 
+
     public void start() {
         Toolkit.getDefaultToolkit().addAWTEventListener(this,
-            AWTEvent.MOUSE_EVENT_MASK | AWTEvent.KEY_EVENT_MASK
-            | AWTEvent.FOCUS_EVENT_MASK);
+                                                        AWTEvent.MOUSE_EVENT_MASK | AWTEvent.KEY_EVENT_MASK
+                                                        | AWTEvent.FOCUS_EVENT_MASK);
     }
 
 
@@ -61,8 +61,8 @@ public class ComponentHighlighter implements AWTEventListener {
         }
 
         boolean exitFromPrev =
-            guiComponent.getSwingComponent() == prevComponent
-            && awtEvent.getID() != MouseEvent.MOUSE_ENTERED;
+              guiComponent.getSwingComponent() == prevComponent
+              && awtEvent.getID() != MouseEvent.MOUSE_ENTERED;
 
         if (exitFromPrev) {
             prevComponent = null;

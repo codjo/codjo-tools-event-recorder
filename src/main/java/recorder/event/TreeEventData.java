@@ -6,12 +6,13 @@
 package recorder.event;
 import javax.swing.tree.TreePath;
 /**
- * Représente les données extraite .
+ * Represents extracted data.
  */
 public class TreeEventData {
     private TreePath path;
     private boolean collapsed;
     private boolean selected;
+
 
     public TreeEventData(TreePath path, boolean collapsed, boolean selected) {
         if (path == null) {
@@ -21,6 +22,7 @@ public class TreeEventData {
         this.collapsed = collapsed;
         this.selected = selected;
     }
+
 
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -32,7 +34,7 @@ public class TreeEventData {
 
         final TreeEventData data = (TreeEventData)obj;
         return selected == data.selected && collapsed == data.collapsed
-        && path.equals(data.path);
+               && path.equals(data.path);
     }
 
 

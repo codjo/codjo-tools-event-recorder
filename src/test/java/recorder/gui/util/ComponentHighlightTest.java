@@ -4,24 +4,19 @@
  * Common Apache License 2.0
  */
 package recorder.gui.util;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 /**
- * Classe de test de {@link ComponentHighlighter}.
+
  */
 public class ComponentHighlightTest extends TestCase {
     private ComponentHighlighter highlighter;
 
+
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         highlighter = new ComponentHighlighter();
@@ -63,9 +58,7 @@ public class ComponentHighlightTest extends TestCase {
 
 
     /**
-     * Cas d'un composant dans un autre. Swing envoie des event 'doublon' quand on rentre
-     * dans le 'field' swing envoie aussi un event indiquant que l'on rentre dans le
-     * container.
+     * Cas d'un composant dans un autre. Swing envoie des event 'doublon' quand on rentre dans le 'field' swing envoie aussi un event indiquant que l'on rentre dans le container.
      */
     public void test_container_enter_exit() {
         final JComponent field = new JTextField();
@@ -166,14 +159,17 @@ public class ComponentHighlightTest extends TestCase {
 
     private JFrame newFrame(final JComponent source) {
         return new JFrame() {
-                public Component findComponentAt(Point point) {
-                    return source;
-                }
-            };
+            @Override
+            public Component findComponentAt(Point point) {
+                return source;
+            }
+        };
     }
+
 
     private static class MockListener implements HighlightListener {
         private int called = 0;
+
 
         public void highlight(JComponent component) {
             called++;

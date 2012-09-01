@@ -13,10 +13,13 @@ import recorder.result.Statement;
 public class MockAssertContext extends AssertContext {
     private Statement postedAssert;
 
+
     public MockAssertContext() {
         super(new Recorder(new GuiComponentFactory()));
     }
 
+
+    @Override
     public void postAssert(Statement result) {
         postedAssert = result;
     }

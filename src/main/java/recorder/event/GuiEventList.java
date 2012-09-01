@@ -5,17 +5,17 @@
  */
 package recorder.event;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-/**
- */
 public class GuiEventList {
-    private List eventList = new ArrayList();
-    private List consumedList = new ArrayList();
+    private List<GuiEvent> eventList = new ArrayList<GuiEvent>();
+    private List<GuiEvent> consumedList = new ArrayList<GuiEvent>();
     private long consumedEventLimit = 100;
 
-    public GuiEventList() {}
+
+    public GuiEventList() {
+    }
+
 
     public long size() {
         return eventList.size();
@@ -28,12 +28,12 @@ public class GuiEventList {
 
 
     public GuiEvent pop() {
-        Object removedEvent = eventList.remove(0);
+        GuiEvent removedEvent = eventList.remove(0);
         consumedList.add(0, removedEvent);
         if (consumedList.size() >= getConsumedEventLimit()) {
             consumedList.remove(consumedList.size() - 1);
         }
-        return (GuiEvent)removedEvent;
+        return removedEvent;
     }
 
 
@@ -41,13 +41,12 @@ public class GuiEventList {
         if (size() == 0) {
             return null;
         }
-        return (GuiEvent)eventList.get(0);
+        return eventList.get(0);
     }
 
 
     public GuiEvent findPrevious(GuiEvent mask) {
-        for (Iterator iter = consumedList.iterator(); iter.hasNext();) {
-            GuiEvent event = (GuiEvent)iter.next();
+        for (GuiEvent event : consumedList) {
             if (match(mask, event)) {
                 return event;
             }
@@ -58,7 +57,7 @@ public class GuiEventList {
 
     private boolean match(GuiEvent mask, GuiEvent event) {
         return (mask.getType() == null || mask.getType() == event.getType())
-        && (mask.getSource() == null || mask.getSource().equals(event.getSource()));
+               && (mask.getSource() == null || mask.getSource().equals(event.getSource()));
     }
 
 

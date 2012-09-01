@@ -5,18 +5,15 @@
  */
 package recorder.component;
 import javax.accessibility.AccessibleContext;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Stratégie de recherche par nom d'accés. Cette stratégie permet de trouver un composant
- * par le nom du {@link AccessibleContext}.
- *
- * @version $Revision: 1.1.1.1 $
+ * Search strategy using the swing accessible context. Can find a component by the {@link javax.accessibility.AccessibleContext} name.
  */
-class FindByAccessbleContext implements FindStrategy {
+class FindByAccessibleContext implements FindStrategy {
     public boolean canFound(JComponent swingComponent) {
         AccessibleContext accessibleContext = swingComponent.getAccessibleContext();
         return accessibleContext != null && accessibleContext.getAccessibleName() != null
-        && accessibleContext.getAccessibleName().length() > 0;
+               && accessibleContext.getAccessibleName().length() > 0;
     }
 
 

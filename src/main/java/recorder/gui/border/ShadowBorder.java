@@ -4,36 +4,34 @@
  * Common Apache License 2.0
  */
 package recorder.gui.border;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 /**
- * Ajoute une bordure avec ombre (coté droit et en bas).
- * 
- * <p>
- * Utilise les couleurs 'controlShadow' définit dans le UIManager.
- * </p>
+ * Border with a shadow (down and left sides).
+ *
+ * <p> Use 'controlShadow' color defined in the UIManager. </p>
  */
 public class ShadowBorder extends AbstractBorder {
     private static final Insets INSETS = new Insets(1, 1, 3, 3);
 
+
+    @Override
     public Insets getBorderInsets(Component component) {
         return INSETS;
     }
 
 
+    @Override
     public void paintBorder(Component component, Graphics graphics, int x, int y, int w, int h) {
         Color shadow = UIManager.getColor("controlShadow");
         if (shadow == null) {
             shadow = Color.gray;
         }
         Color lightShadow =
-            new Color(shadow.getRed(), shadow.getGreen(), shadow.getBlue(), 170);
+              new Color(shadow.getRed(), shadow.getGreen(), shadow.getBlue(), 170);
         Color lighterShadow =
-            new Color(shadow.getRed(), shadow.getGreen(), shadow.getBlue(), 70);
+              new Color(shadow.getRed(), shadow.getGreen(), shadow.getBlue(), 70);
         graphics.translate(x, y);
 
         graphics.setColor(shadow);

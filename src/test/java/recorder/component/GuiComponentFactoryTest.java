@@ -4,20 +4,10 @@
  * Common Apache License 2.0
  */
 package recorder.component;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import junit.framework.TestCase;
-import recorder.component.GuiComponent;
-/**
- * Classe de test de {@link GuiComponentFactory}.
- */
 public class GuiComponentFactoryTest extends TestCase {
     public void test_container_noPoint() throws Exception {
         final JComponent source = new JLabel();
@@ -28,7 +18,7 @@ public class GuiComponentFactoryTest extends TestCase {
 
 
     /**
-     * Un combobox est constitué de pleins de sous-composant.
+     * JComboBox is composed of more atomic GUI component.
      */
     public void test_jcombobox() {
         JComponent combo = new JComboBox();
@@ -37,7 +27,7 @@ public class GuiComponentFactoryTest extends TestCase {
 
         GuiComponentFactory factory = new GuiComponentFactory();
         GuiComponent guiComponent = factory.find(subComponent);
-        assertFalse("Pas de nom doc pas retrouvable", guiComponent.isFindable());
+        assertFalse("No name and therefore can not be found", guiComponent.isFindable());
         assertSame(combo, guiComponent.getSwingComponent());
     }
 
@@ -66,8 +56,8 @@ public class GuiComponentFactoryTest extends TestCase {
 
         GuiComponentFactory factory = new GuiComponentFactory();
         factory.setIgnoredContainer("ignore");
-        assertNull("Le composant source est dans un composant ignoré, il n'est donc pas 'trouvé'",
-            factory.find(newEvent(source)));
+        assertNull("The component is under an ignored one. It cannot be 'found'",
+                   factory.find(newEvent(source)));
     }
 
 
@@ -97,21 +87,20 @@ public class GuiComponentFactoryTest extends TestCase {
 
 
     private Container newFrame(final Component source) {
-        Container frame =
-            new JFrame() {
-                public Component findComponentAt(Point point) {
-                    if (point == null) {
-                        throw new NullPointerException();
-                    }
-                    if (source != null) {
-                        return source;
-                    }
-                    else {
-                        return this;
-                    }
+        return new JFrame() {
+            @Override
+            public Component findComponentAt(Point point) {
+                if (point == null) {
+                    throw new NullPointerException();
                 }
-            };
-        return frame;
+                if (source != null) {
+                    return source;
+                }
+                else {
+                    return this;
+                }
+            }
+        };
     }
 
 

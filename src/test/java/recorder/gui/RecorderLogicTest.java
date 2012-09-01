@@ -4,19 +4,15 @@
  * Common Apache License 2.0
  */
 package recorder.gui;
-import java.awt.AWTEvent;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 import recorder.gui.util.Util;
 /**
- * Classe de test de {@link RecorderLogic}.
+
  */
 public class RecorderLogicTest extends TestCase {
     private RecorderLogic logic;

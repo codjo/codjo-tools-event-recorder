@@ -7,11 +7,9 @@ package recorder.result;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-/**
- * Liste de résultat de gesture.
- */
 public class StatementList implements Statement {
-    private List list = new ArrayList();
+    private List<Statement> list = new ArrayList<Statement>();
+
 
     public boolean isEquivalentTo(Statement obj) {
         if (this == obj) {
@@ -26,8 +24,8 @@ public class StatementList implements Statement {
         }
 
         for (int idx = 0; idx < list.size() && idx < other.list.size(); idx++) {
-            Statement stmt = (Statement)list.get(idx);
-            Statement otherStmt = (Statement)other.list.get(idx);
+            Statement stmt = list.get(idx);
+            Statement otherStmt = other.list.get(idx);
             if (!stmt.isEquivalentTo(otherStmt)) {
                 return false;
             }
@@ -37,11 +35,11 @@ public class StatementList implements Statement {
 
 
     public String toXml() {
-        StringBuffer buffer = new StringBuffer();
-        for (Iterator iter = list.iterator(); iter.hasNext();) {
-            Statement result = (Statement)iter.next();
+        StringBuilder buffer = new StringBuilder();
+        for (Iterator<Statement> iterator = list.iterator(); iterator.hasNext(); ) {
+            Statement result = iterator.next();
             buffer.append(result.toXml());
-            if (iter.hasNext()) {
+            if (iterator.hasNext()) {
                 buffer.append('\n');
             }
         }
@@ -55,10 +53,10 @@ public class StatementList implements Statement {
 
 
     public Statement lastResult() {
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             return null;
         }
-        return (Statement)list.get(list.size() - 1);
+        return list.get(list.size() - 1);
     }
 
 
@@ -78,6 +76,6 @@ public class StatementList implements Statement {
 
 
     public Statement get(int index) {
-        return (Statement)list.get(index);
+        return list.get(index);
     }
 }

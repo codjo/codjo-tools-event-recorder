@@ -4,24 +4,25 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import javax.swing.JTable;
+import javax.swing.*;
 import recorder.gui.action.GuiAction;
 import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 /**
- * Permet de créer un tag assertTable.
+ * Creates tag assertTable.
  */
 class AssertTable extends AbstractAssert {
     static final String ID = "assertion.table";
     private AssertContext context;
 
+
     AssertTable(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertTable");
-        putValue(GuiAction.TOOLTIP,
-            "Ajoute un 'assertion' sur la valeur d'une cellule d'une JTable");
+        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la valeur d'une cellule d'une JTable");
         this.context = assertContext;
     }
+
 
     public void execute() {
         if (!(context.getSource() instanceof JTable)) {
@@ -34,13 +35,14 @@ class AssertTable extends AbstractAssert {
         AttributeList attributes = new AttributeList();
         attributes.put("name", table.getName());
         attributes.put("expected", table.getValueAt(rowAtPoint, colAtPoint));
-        attributes.put("row", new Integer(rowAtPoint));
-        attributes.put("column", new Integer(colAtPoint));
+        attributes.put("row", rowAtPoint);
+        attributes.put("column", colAtPoint);
 
         context.postAssert(new DefaultStatement("assertTable", attributes));
     }
 
 
+    @Override
     public void update() {
         this.setEnabled((context.getSource() instanceof JTable));
     }

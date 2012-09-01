@@ -6,18 +6,18 @@
 package recorder.gui.assertion;
 import junit.framework.TestCase;
 import recorder.Recorder;
+import recorder.component.GuiComponentFactory;
 import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 import recorder.result.Statement;
-import recorder.component.GuiComponentFactory;
 /**
- * Classe de test de {@link AssertContext}.
+
  */
 public class AssertContextTest extends TestCase {
     public void test_constructor() throws Exception {
         try {
             new AssertContext(null);
-            fail("Le recorder doit être défini");
+            fail("The recorder must be defined");
         }
         catch (IllegalArgumentException ex) {
             ; // Ok
@@ -29,7 +29,7 @@ public class AssertContextTest extends TestCase {
         Recorder recorder = new Recorder(new GuiComponentFactory());
         AssertContext context = new AssertContext(recorder);
         Statement assertStmt =
-            new DefaultStatement("assertion", AttributeList.EMPTY_LIST);
+              new DefaultStatement("assertion", AttributeList.EMPTY_LIST);
 
         context.postAssert(assertStmt);
 

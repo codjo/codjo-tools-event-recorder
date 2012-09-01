@@ -4,24 +4,22 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertListSize}.
+
  */
 public class AssertListSizeTest extends TestCase {
     private static final int EXPECTED_SIZE = 1;
     private AssertListSize assertListSize;
     private MockAssertContext context;
 
+
+    @Override
     protected void setUp() throws Exception {
         context = new MockAssertContext();
         assertListSize = new AssertListSize(context);
@@ -64,7 +62,7 @@ public class AssertListSizeTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini pour " + name, resultAssert);
         assertEquals("<assertListSize name=\"" + name + "\" expected=\"" + EXPECTED_SIZE
-            + "\"/>", resultAssert.toXml());
+                     + "\"/>", resultAssert.toXml());
     }
 
 

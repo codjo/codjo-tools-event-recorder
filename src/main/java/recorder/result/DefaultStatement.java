@@ -6,11 +6,12 @@
 package recorder.result;
 import java.util.Iterator;
 /**
- * Représente un tag avec des attributs.
+ * Represents a tag with attributes.
  */
 public class DefaultStatement implements Statement {
     private String tagName;
     private AttributeList attributes;
+
 
     public DefaultStatement(String tagName, AttributeList attributes) {
         if (tagName == null || attributes == null) {
@@ -19,6 +20,7 @@ public class DefaultStatement implements Statement {
         this.tagName = tagName;
         this.attributes = attributes;
     }
+
 
     public String toXml() {
         return "<" + tagName + buildAttributes() + "/>";
@@ -38,6 +40,7 @@ public class DefaultStatement implements Statement {
         if (!attributes.equals(defaultStatement.attributes)) {
             return false;
         }
+        //noinspection RedundantIfStatement
         if (!tagName.equals(defaultStatement.tagName)) {
             return false;
         }
@@ -47,10 +50,10 @@ public class DefaultStatement implements Statement {
 
 
     private String buildAttributes() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
-        for (Iterator iter = attributes.iterator(); iter.hasNext();) {
-            Attribute entry = (Attribute)iter.next();
+        for (Iterator iterator = attributes.iterator(); iterator.hasNext(); ) {
+            Attribute entry = (Attribute)iterator.next();
             buffer.append(" ").append(entry.getName()).append("=\"")
                   .append(convertToXml(entry.getValue().toString())).append("\"");
         }
@@ -70,12 +73,11 @@ public class DefaultStatement implements Statement {
     }
 
 
-    StringBuffer replace(StringBuffer sb, String oldStr, String newStr) {
+    void replace(StringBuffer sb, String oldStr, String newStr) {
         int startIndex = sb.toString().indexOf(oldStr);
         while (startIndex != -1) {
             sb.replace(startIndex, startIndex + oldStr.length(), newStr);
             startIndex = sb.toString().indexOf(oldStr, startIndex + 1);
         }
-        return sb;
     }
 }

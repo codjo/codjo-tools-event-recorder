@@ -4,7 +4,7 @@
  * Common Apache License 2.0
  */
 package recorder.gesture;
-import javax.swing.JButton;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.event.GuiEvent;
@@ -12,10 +12,11 @@ import recorder.event.GuiEventList;
 import recorder.event.GuiEventType;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link ClickButton}.
+
  */
 public class ClickButtonTest extends TestCase {
     private ClickButton clickGesture;
+
 
     public void test_simple() throws Exception {
         JButton file = new JButton("File");
@@ -23,7 +24,7 @@ public class ClickButtonTest extends TestCase {
 
         GuiEventList list = new GuiEventList();
         list.addEvent(new GuiEvent(GuiEventType.BUTTON_CLICK,
-                GuiComponentFactory.newGuiComponent(file)));
+                                   GuiComponentFactory.newGuiComponent(file)));
 
         StatementList result = new StatementList();
 
@@ -40,7 +41,7 @@ public class ClickButtonTest extends TestCase {
 
         GuiEventList list = new GuiEventList();
         list.addEvent(new GuiEvent(GuiEventType.BUTTON_CLICK,
-                GuiComponentFactory.newGuiComponent(file)));
+                                   GuiComponentFactory.newGuiComponent(file)));
 
         StatementList result = new StatementList();
 
@@ -57,7 +58,7 @@ public class ClickButtonTest extends TestCase {
 
         GuiEventList list = new GuiEventList();
         list.addEvent(new GuiEvent(GuiEventType.BUTTON_CLICK,
-                GuiComponentFactory.newGuiComponent(file)));
+                                   GuiComponentFactory.newGuiComponent(file)));
 
         StatementList result = new StatementList();
 
@@ -69,6 +70,7 @@ public class ClickButtonTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         clickGesture = new ClickButton();
     }

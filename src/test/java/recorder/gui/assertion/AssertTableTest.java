@@ -4,19 +4,20 @@
  * Common Apache License 2.0
  */
 package recorder.gui.assertion;
-import java.awt.Point;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import java.awt.*;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertTable}.
+
  */
 public class AssertTableTest extends TestCase {
     private AssertTable assertTable;
     private MockAssertContext context;
 
+
+    @Override
     protected void setUp() throws Exception {
         context = new MockAssertContext();
         assertTable = new AssertTable(context);
@@ -39,7 +40,7 @@ public class AssertTableTest extends TestCase {
         Statement resultAssert = context.getPostedAssert();
         assertNotNull("un assertion est défini", resultAssert);
         assertEquals("<assertTable name=\"Ma table\" expected=\"a2\" row=\"1\" column=\"0\"/>",
-            resultAssert.toXml());
+                     resultAssert.toXml());
     }
 
 
@@ -76,19 +77,21 @@ public class AssertTableTest extends TestCase {
 
     private JTable buildJTable(final int rowAtPoint, final int colAtPoint, String name) {
         JTable source =
-            new JTable(new String[][] {
+              new JTable(new String[][]{
                     {"a1", "b1"},
                     {"a2", "b2"}
-                }, new String[] {"colA", "colB"}) {
-                public int rowAtPoint(Point point) {
-                    return rowAtPoint;
-                }
+              }, new String[]{"colA", "colB"}) {
+                  @Override
+                  public int rowAtPoint(Point point) {
+                      return rowAtPoint;
+                  }
 
 
-                public int columnAtPoint(Point point) {
-                    return colAtPoint;
-                }
-            };
+                  @Override
+                  public int columnAtPoint(Point point) {
+                      return colAtPoint;
+                  }
+              };
         source.setName(name);
         return source;
     }

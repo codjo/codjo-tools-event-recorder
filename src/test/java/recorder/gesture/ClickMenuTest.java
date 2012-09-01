@@ -4,11 +4,7 @@
  * Common Apache License 2.0
  */
 package recorder.gesture;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
@@ -17,12 +13,13 @@ import recorder.event.GuiEventList;
 import recorder.event.GuiEventType;
 import recorder.result.StatementList;
 /**
- * Classe de test de {@link ClickMenu}.
+
  */
 public class ClickMenuTest extends TestCase {
     private StatementList result;
     private ClickMenu clickMenuGesture;
     private GuiEventList list;
+
 
     public void test_menu() throws Exception {
         JMenu file = new JMenu("File");
@@ -76,6 +73,7 @@ public class ClickMenuTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws Exception {
         result = new StatementList();
         clickMenuGesture = new ClickMenu();

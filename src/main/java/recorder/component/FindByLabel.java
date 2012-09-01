@@ -4,22 +4,16 @@
  * Common Apache License 2.0
  */
 package recorder.component;
-import javax.swing.AbstractButton;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Stratégie de recherche par label. Cette stratégie permet de trouver un composant par
- * le label.
- * 
- * <p>
- * <b>NB:</b>Pour l'instant seul les JMenuItem sont pris en compte.
- * </p>
+ * Search strategy using a GUI component label.
  *
- * @version $Revision: 1.2 $
+ * <p> <b>NB:</b>Only JMenuItem are handled by this strategy. </p>
  */
 class FindByLabel implements FindStrategy {
     public boolean canFound(JComponent swingComponent) {
         return swingComponent instanceof AbstractButton
-        && isEmpty(((AbstractButton)swingComponent).getText());
+               && isEmpty(((AbstractButton)swingComponent).getText());
     }
 
 

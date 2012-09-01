@@ -6,14 +6,11 @@
 package recorder.event;
 
 import recorder.component.GuiComponent;
-
-/**
- * Un evenement gui.
- */
 public class GuiEvent {
     private final GuiEventType type;
     private final GuiComponent source;
     private Object value;
+
 
     public GuiEvent(GuiEventType eventType, GuiComponent source) {
         this.type = eventType;
@@ -26,6 +23,7 @@ public class GuiEvent {
         this.source = source;
         this.value = value;
     }
+
 
     public Object getValue() {
         return value;
@@ -53,6 +51,7 @@ public class GuiEvent {
         if (!type.equals(event.type)) {
             return false;
         }
+        //noinspection RedundantIfStatement
         if (value != null ? !value.equals(event.value) : event.value != null) {
             return false;
         }
@@ -73,6 +72,6 @@ public class GuiEvent {
 
     public String toString() {
         return "GuiEvent{" + "type=" + type + ", source=" + source + ", value=" + value
-        + "}";
+               + "}";
     }
 }

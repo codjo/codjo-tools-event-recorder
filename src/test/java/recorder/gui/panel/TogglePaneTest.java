@@ -4,23 +4,14 @@
  * Terms of license - http://opensource.org/licenses/apachepl.php
  */
 package recorder.gui.panel;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import junit.framework.TestCase;
 import recorder.gui.util.Util;
 /**
- * Classe de test de {@link TogglePane}.
+
  */
 public class TogglePaneTest extends TestCase {
     private static final String SPLIT_NAME = "TogglePane.split";

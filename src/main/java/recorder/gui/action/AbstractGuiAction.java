@@ -8,18 +8,19 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.event.SwingPropertyChangeSupport;
-/**
- */
 public abstract class AbstractGuiAction implements GuiAction {
     private boolean enabled = true;
     private SwingPropertyChangeSupport changeSupport;
-    private Map storage = new HashMap();
+    private Map<String, Object> storage = new HashMap<String, Object>();
+
 
     protected AbstractGuiAction(String actionId) {
         putValue(ACTION_ID, actionId);
     }
 
-    public void update() {}
+
+    public void update() {
+    }
 
 
     public Object getValue(String key) {

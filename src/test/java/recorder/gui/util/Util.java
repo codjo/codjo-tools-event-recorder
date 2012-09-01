@@ -4,13 +4,11 @@
  * Common Apache License 2.0
  */
 package recorder.gui.util;
-import java.awt.Component;
-import java.awt.Container;
-import javax.swing.AbstractButton;
-import javax.swing.JTree;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 /**
- * Ensemble de classe utilitaire pour les tests IHM.
+ * Utility class for GUI testing.
  */
 public final class Util {
     private Util() {
@@ -18,7 +16,7 @@ public final class Util {
 
 
     public static String uiDisplayedContent(JTree tree) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int rowCount = tree.getRowCount();
         for (int i = 0; i < rowCount; i++) {
             TreePath path = tree.getPathForRow(i);
@@ -33,7 +31,7 @@ public final class Util {
 
 
     private static String pathToString(JTree tree, TreePath treePath) {
-        StringBuffer buffer = new StringBuffer("[");
+        StringBuilder buffer = new StringBuilder("[");
 
         Object[] path = treePath.getPath();
 
