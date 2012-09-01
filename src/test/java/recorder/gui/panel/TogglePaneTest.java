@@ -21,10 +21,12 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import recorder.gui.util.Util;
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.*;
 /**
 
  */
@@ -42,9 +44,8 @@ public class TogglePaneTest {
     @Test
     public void test_setContent() {
         pane.setContent(oneContent);
-        Assert.assertNotNull("oneContent est affiché",
-                             Util.findByName(oneContent.getName(), pane));
-        Assert.assertSame(oneContent, Util.findByName(oneContent.getName(), pane));
+        assertNotNull("oneContent is displayed", Util.findByName(oneContent.getName(), pane));
+        assertSame(oneContent, Util.findByName(oneContent.getName(), pane));
     }
 
 
@@ -52,8 +53,8 @@ public class TogglePaneTest {
     public void test_setContent_cleanup() {
         pane.setContent(oneContent);
         pane.setContent(null);
-        Assert.assertNull("oneContent n'est plus affiché",
-                          Util.findByName(oneContent.getName(), pane));
+        assertNull("oneContent is not displayed anymore",
+                   Util.findByName(oneContent.getName(), pane));
     }
 
 
@@ -62,13 +63,13 @@ public class TogglePaneTest {
         pane.addTab(firstPaneLabel, firstPane);
         AbstractButton firstButton = findByLabel(firstPaneLabel);
 
-        Assert.assertNull("Pas de split au démarrage", findByName(SPLIT_NAME));
+        assertNull("No split at the beginning", findByName(SPLIT_NAME));
 
         firstButton.doClick();
-        Assert.assertNotNull("Split à l'affichage du tab", findByName(SPLIT_NAME));
+        assertNotNull("Split appears when tab is displayed", findByName(SPLIT_NAME));
 
         firstButton.doClick();
-        Assert.assertNull("Pas de split si le tab n'est plus affiché", findByName(SPLIT_NAME));
+        assertNull("No split when no tab is displayed", findByName(SPLIT_NAME));
     }
 
 
@@ -81,10 +82,11 @@ public class TogglePaneTest {
         firstPane.setPreferredSize(new Dimension(0, 4));
 
         firstButton.doClick();
-        Assert.assertNotNull("Panel 1 est affiché", findByName(firstPane.getName()));
+        assertNotNull("Panel 1 is displayed", findByName(firstPane.getName()));
 
         JSplitPane splitPane = (JSplitPane)findByName(SPLIT_NAME);
-        Assert.assertEquals(6, splitPane.getDividerLocation());
+        assertThat(splitPane.getDividerLocation(), anyOf(equalTo(6) /* Windows */,
+                                                         equalTo(7)) /* OS X */);
     }
 
 
@@ -96,10 +98,10 @@ public class TogglePaneTest {
         pane.setSize(0, 9 + SPLIT_DIVIDER_SIZE);
 
         firstButton.doClick();
-        Assert.assertNotNull("Panel 1 est affiché", findByName(firstPane.getName()));
+        assertNotNull("Panel 1 is displayed", findByName(firstPane.getName()));
 
         JSplitPane splitPane = (JSplitPane)findByName(SPLIT_NAME);
-        Assert.assertEquals(3, splitPane.getDividerLocation());
+        assertEquals(3, splitPane.getDividerLocation());
     }
 
 
@@ -112,10 +114,10 @@ public class TogglePaneTest {
         AbstractButton secondButton = findByLabel(secondPaneLabel);
 
         firstButton.doClick();
-        Assert.assertNotNull("Panel 1 est affiché", findByName(firstPane.getName()));
+        assertNotNull("Panel 1 is displayed", findByName(firstPane.getName()));
 
         JSplitPane splitPane = (JSplitPane)findByName(SPLIT_NAME);
-        Assert.assertNotNull("Le split est affiché", splitPane);
+        assertNotNull("Split is displayed", splitPane);
 
         splitPane.setDividerLocation(10);
 
@@ -123,10 +125,10 @@ public class TogglePaneTest {
         splitPane.setDividerLocation(20);
 
         firstButton.doClick();
-        Assert.assertEquals(10, splitPane.getDividerLocation());
+        assertEquals(10, splitPane.getDividerLocation());
 
         secondButton.doClick();
-        Assert.assertEquals(20, splitPane.getDividerLocation());
+        assertEquals(20, splitPane.getDividerLocation());
     }
 
 
@@ -135,23 +137,23 @@ public class TogglePaneTest {
         pane.addTab(firstPaneLabel, firstPane);
 
         AbstractButton button = findByLabel(firstPaneLabel);
-        Assert.assertNotNull("Boutton 'first' existe", button);
-        Assert.assertNull("Le pane n'est pas affiché par défaut", findByName(firstPane.getName()));
+        assertNotNull("Button 'first' exists", button);
+        assertNull("The pane is not displayed by default", findByName(firstPane.getName()));
 
         button.doClick();
 
-        Assert.assertSame("Le pane est affiché après un click sur le toggle", firstPane,
-                          findByName(firstPane.getName()));
+        assertSame("The pane is displayed after a click on the toggle", firstPane,
+                   findByName(firstPane.getName()));
 
         button.doClick();
 
-        Assert.assertNull("Le pane n'est plus affiché après un 2eme click sur le toggle",
-                          findByName(firstPane.getName()));
+        assertNull("The pane disappears after a second click on the toggle",
+                   findByName(firstPane.getName()));
 
         button.doClick();
 
-        Assert.assertSame("Le pane est une nouvelle fois affiché après un click sur le toggle",
-                          firstPane, findByName(firstPane.getName()));
+        assertSame("The pane is displayed after a new click on the toggle",
+                   firstPane, findByName(firstPane.getName()));
     }
 
 
@@ -165,14 +167,14 @@ public class TogglePaneTest {
 
         firstButton.doClick();
 
-        Assert.assertSame("Le pane 1 est affiché", firstPane, findByName(firstPane.getName()));
-        Assert.assertFalse("Le button 2 est désactivé", secondButton.isSelected());
+        assertSame("Pane 1 is displayed", firstPane, findByName(firstPane.getName()));
+        assertFalse("Button 2 is off", secondButton.isSelected());
 
         secondButton.doClick();
 
-        Assert.assertSame("Le pane 2 est affiché", secondPane, findByName(secondPane.getName()));
-        Assert.assertNull("Le pane 1 n'est plus affiché", findByName(firstPane.getName()));
-        Assert.assertFalse("Le button 1 est désactivé", firstButton.isSelected());
+        assertSame("Pane 2 is displayed", secondPane, findByName(secondPane.getName()));
+        assertNull("Pane 1 is not anymore displayed", findByName(firstPane.getName()));
+        assertFalse("Button 1 is off", firstButton.isSelected());
     }
 
 
@@ -205,17 +207,17 @@ public class TogglePaneTest {
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        JFrame frame = new JFrame("Essai composant GUI");
+        JFrame frame = new JFrame("Sample GUI");
 
         TogglePane pane = new TogglePane();
         JLabel oneContent =
-              new JLabel("<html> <b>content</b> <br> C'est chouette l'HTML");
+              new JLabel("<html> <b>content</b> <br> HTML is easy");
         oneContent.setBorder(BorderFactory.createLineBorder(Color.lightGray));
         pane.setContent(oneContent);
         pane.addTab("Project",
-                    new TitledPanel("Mon projet", null, new JLabel("Un projet important")));
-        pane.addTab("Log", new TitledPanel("Mon Log"));
-        pane.addTab("Help", new JLabel("<html> <b>Aide</b> <br> <i>Beautiful should be found here</i>"));
+                    new TitledPanel("My project", null, new JLabel("An important project")));
+        pane.addTab("Log", new TitledPanel("My Log"));
+        pane.addTab("Help", new JLabel("<html> <b>Help</b> <br> <i>Beautiful help should be found here</i>"));
 
         frame.setContentPane(pane);
         frame.setSize(600, 400);
