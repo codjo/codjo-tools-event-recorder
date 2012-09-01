@@ -5,29 +5,33 @@
  */
 package recorder.gui.assertion;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
 
  */
-public class AssertValueTest extends TestCase {
+public class AssertValueTest {
     private AssertValue assertValue;
     private MockAssertContext context;
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertValue = new AssertValue(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertValue.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertValue.getAssertType());
     }
 
 
+    @Test
     public void test_assert_value_jTextField() throws Exception {
         JTextField source = new JTextField("Ma valeur");
         source.setName("Mon textField");
@@ -37,12 +41,13 @@ public class AssertValueTest extends TestCase {
         assertValue.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertValue name=\"Mon textField\" expected=\"Ma valeur\"/>",
-                     resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertValue name=\"Mon textField\" expected=\"Ma valeur\"/>",
+                            resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_value_jCheckBox() throws Exception {
         JCheckBox source = new JCheckBox();
         source.setName("Mon textField");
@@ -53,12 +58,13 @@ public class AssertValueTest extends TestCase {
         assertValue.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertValue name=\"Mon textField\" expected=\"true\"/>",
-                     resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertValue name=\"Mon textField\" expected=\"true\"/>",
+                            resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_value_jComboBox() throws Exception {
         JComboBox source = new JComboBox(new String[]{"Val1", "Val2"});
         source.setSelectedItem("Val2");
@@ -69,12 +75,13 @@ public class AssertValueTest extends TestCase {
         assertValue.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertValue name=\"Mon comboBox\" expected=\"Val2\"/>",
-                     resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertValue name=\"Mon comboBox\" expected=\"Val2\"/>",
+                            resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTable source = new JTable();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -82,36 +89,39 @@ public class AssertValueTest extends TestCase {
         assertValue.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("un assertion n'est pas défini", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTable source = new JTable();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertValue.update();
 
-        assertFalse("Assert disable", assertValue.isEnabled());
+        Assert.assertFalse("Assert disable", assertValue.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_jTextField() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertValue.update();
 
-        assertFalse("Assert disabled (car composant non trouvable)",
-                    assertValue.isEnabled());
+        Assert.assertFalse("Assert disabled (car composant non trouvable)",
+                           assertValue.isEnabled());
 
         source.setName("bobo");
         assertValue.update();
 
-        assertTrue("Assert enable", assertValue.isEnabled());
+        Assert.assertTrue("Assert enable", assertValue.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_jComboBox() throws Exception {
         JComboBox source = new JComboBox();
         source.setName("aName");
@@ -119,10 +129,11 @@ public class AssertValueTest extends TestCase {
 
         assertValue.update();
 
-        assertTrue("Assert enable", assertValue.isEnabled());
+        Assert.assertTrue("Assert enable", assertValue.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_jCheckBox() throws Exception {
         JCheckBox source = new JCheckBox();
         source.setName("aName");
@@ -130,6 +141,6 @@ public class AssertValueTest extends TestCase {
 
         assertValue.update();
 
-        assertTrue("Assert enable", assertValue.isEnabled());
+        Assert.assertTrue("Assert enable", assertValue.isEnabled());
     }
 }

@@ -5,7 +5,9 @@
  */
 package recorder.gesture;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 import recorder.event.GuiEvent;
@@ -15,12 +17,13 @@ import recorder.result.StatementList;
 /**
 
  */
-public class SetValueTest extends TestCase {
+public class SetValueTest {
     private GuiEventList list;
     private StatementList result;
     private SetValue setValueGesture;
 
 
+    @Test
     public void test_combo() {
         JComboBox field = new JComboBox();
         field.setName("myfield");
@@ -29,11 +32,12 @@ public class SetValueTest extends TestCase {
 
         setValueGesture.receive(list, result);
 
-        assertEquals("Les events sont consommés", 0, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"bb\"/>", result.toXml());
+        Assert.assertEquals("Les events sont consommés", 0, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"bb\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_combo_change() {
         JComboBox field = new JComboBox();
         field.setName("myfield");
@@ -44,7 +48,7 @@ public class SetValueTest extends TestCase {
         list.addEvent(newGuiEvent(GuiEventType.COMBO_FOCUS_LOST, field, "bb"));
 
         setValueGesture.receive(list, result);
-        assertEquals("Rien n'est consommé", 4, list.size());
+        Assert.assertEquals("Rien n'est consommé", 4, list.size());
 
         // Consomme les 3 premiers events pour tomber sur COMBO_FOCUS_LOST de field.
         list.pop();
@@ -53,11 +57,12 @@ public class SetValueTest extends TestCase {
 
         setValueGesture.receive(list, result);
 
-        assertEquals("Les events sont consommés", 0, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"bb\"/>", result.toXml());
+        Assert.assertEquals("Les events sont consommés", 0, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"bb\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_combo_nochange() {
         JComboBox field = new JComboBox();
         field.setName("myfield");
@@ -69,7 +74,7 @@ public class SetValueTest extends TestCase {
         list.addEvent(newGuiEvent(GuiEventType.COMBO_FOCUS_LOST, field, "bb"));
 
         setValueGesture.receive(list, result);
-        assertEquals("Rien n'est consommé", 5, list.size());
+        Assert.assertEquals("Rien n'est consommé", 5, list.size());
 
         // Consomme les 4 premiers events pour tomber sur COMBO_FOCUS_LOST de field.
         list.pop();
@@ -79,11 +84,12 @@ public class SetValueTest extends TestCase {
 
         setValueGesture.receive(list, result);
 
-        assertEquals("Les events sont consommés", 0, list.size());
-        assertEquals("", result.toXml());
+        Assert.assertEquals("Les events sont consommés", 0, list.size());
+        Assert.assertEquals("", result.toXml());
     }
 
 
+    @Test
     public void test_checkbox() {
         JCheckBox field = new JCheckBox();
         field.setName("myfield");
@@ -92,10 +98,11 @@ public class SetValueTest extends TestCase {
 
         setValueGesture.receive(list, result);
 
-        assertEquals("<setValue name=\"myfield\" value=\"true\"/>", result.toXml());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"true\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_textField() {
         JTextField field = new JTextField();
         field.setName("myfield");
@@ -104,11 +111,12 @@ public class SetValueTest extends TestCase {
 
         setValueGesture.receive(list, result);
 
-        assertEquals("Les events sont consommés", 0, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"une valeur\"/>", result.toXml());
+        Assert.assertEquals("Les events sont consommés", 0, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"une valeur\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_textField_multiple() {
         JTextField field = new JTextField();
         field.setName("myfield");
@@ -121,22 +129,23 @@ public class SetValueTest extends TestCase {
         list.addEvent(newGuiEvent(GuiEventType.KEY, field, "une valeur"));
 
         setValueGesture.receive(list, result);
-        assertEquals("Un event est consommé", 5, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"une v\"/>", result.toXml());
+        Assert.assertEquals("Un event est consommé", 5, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"une v\"/>", result.toXml());
 
         setValueGesture.receive(list, result);
-        assertEquals("Un event est consommé", 4, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"une va\"/>", result.toXml());
+        Assert.assertEquals("Un event est consommé", 4, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"une va\"/>", result.toXml());
 
         setValueGesture.receive(list, result);
         setValueGesture.receive(list, result);
         setValueGesture.receive(list, result);
         setValueGesture.receive(list, result);
-        assertEquals("Les events sont consommés", 0, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"une valeur\"/>", result.toXml());
+        Assert.assertEquals("Les events sont consommés", 0, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"une valeur\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_textField_multiple_notSame() {
         JTextField field = new JTextField();
         field.setName("myfield");
@@ -146,13 +155,13 @@ public class SetValueTest extends TestCase {
 
         setValueGesture.receive(list, result);
 
-        assertEquals("Les events sont consommés", 1, list.size());
-        assertEquals("<setValue name=\"myfield\" value=\"une val\"/>", result.toXml());
+        Assert.assertEquals("Les events sont consommés", 1, list.size());
+        Assert.assertEquals("<setValue name=\"myfield\" value=\"une val\"/>", result.toXml());
     }
 
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         list = new GuiEventList();
         result = new StatementList();
         setValueGesture = new SetValue();

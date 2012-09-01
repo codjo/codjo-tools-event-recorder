@@ -7,8 +7,11 @@ package recorder.gui.action;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javax.swing.event.SwingPropertyChangeSupport;
 public abstract class AbstractGuiAction implements GuiAction {
+    protected final ResourceBundle resourceBundle = ResourceBundle.getBundle("recorder.gui.gui-resources");
+    ;
     private boolean enabled = true;
     private SwingPropertyChangeSupport changeSupport;
     private Map<String, Object> storage = new HashMap<String, Object>();

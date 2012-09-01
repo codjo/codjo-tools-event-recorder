@@ -7,31 +7,35 @@ package recorder.gui.assertion;
 import java.awt.*;
 import java.util.Arrays;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
 
  */
-public class AssertListTest extends TestCase {
+public class AssertListTest {
     private static final int ROW = 1;
     private static final Object VALUE = "expectedValue";
     private AssertList assertList;
     private MockAssertContext context;
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertList = new AssertList(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertList.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertList.getAssertType());
     }
 
 
+    @Test
     public void test_assert_list() throws Exception {
         JList source = buildJList(ROW, VALUE, "Ma Liste");
 
@@ -46,12 +50,13 @@ public class AssertListTest extends TestCase {
         assertList.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini pour " + name, resultAssert);
-        assertEquals("<assertList name=\"" + name + "\" expected=\"" + VALUE
-                     + "\" row=\"" + ROW + "\"/>", resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini pour " + name, resultAssert);
+        Assert.assertEquals("<assertList name=\"" + name + "\" expected=\"" + VALUE
+                            + "\" row=\"" + ROW + "\"/>", resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -59,20 +64,22 @@ public class AssertListTest extends TestCase {
         assertList.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("un assertion n'est pas défini", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertList.update();
 
-        assertFalse("Assert disable", assertList.isEnabled());
+        Assert.assertFalse("Assert disable", assertList.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_list() throws Exception {
         assertEnabledTest(buildJList(2, VALUE, "Ma List"));
     }
@@ -83,7 +90,7 @@ public class AssertListTest extends TestCase {
 
         assertList.update();
 
-        assertTrue("Assert ensable", assertList.isEnabled());
+        Assert.assertTrue("Assert ensable", assertList.isEnabled());
     }
 
 

@@ -7,29 +7,33 @@ package recorder.gui.assertion;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
 
  */
-public class AssertTreeTest extends TestCase {
+public class AssertTreeTest {
     private AssertTree assertTree;
     private MockAssertContext context;
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertTree = new AssertTree(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertTree.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertTree.getAssertType());
     }
 
 
+    @Test
     public void test_assert_exists() throws Exception {
         JTree source =
               buildJTree(new TreePath(new Object[]{"root", "child"}), "treeName");
@@ -40,12 +44,13 @@ public class AssertTreeTest extends TestCase {
         assertTree.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertTree name=\"treeName\" path=\"root:child\" exists=\"true\"/>",
-                     resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertTree name=\"treeName\" path=\"root:child\" exists=\"true\"/>",
+                            resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -53,20 +58,22 @@ public class AssertTreeTest extends TestCase {
         assertTree.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("un assertion n'est pas défini", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertTree.update();
 
-        assertFalse("Assert disable", assertTree.isEnabled());
+        Assert.assertFalse("Assert disable", assertTree.isEnabled());
     }
 
 
+    @Test
     public void test_update_disabled_noNode() throws Exception {
         JTree source = buildJTree(null, "treeName");
 
@@ -75,10 +82,11 @@ public class AssertTreeTest extends TestCase {
 
         assertTree.update();
 
-        assertFalse("Assert disable", assertTree.isEnabled());
+        Assert.assertFalse("Assert disable", assertTree.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable() throws Exception {
         JTree source = buildJTree(new TreePath("root"), "treeName");
 
@@ -87,7 +95,7 @@ public class AssertTreeTest extends TestCase {
 
         assertTree.update();
 
-        assertTrue("Assert ensable", assertTree.isEnabled());
+        Assert.assertTrue("Assert ensable", assertTree.isEnabled());
     }
 
 

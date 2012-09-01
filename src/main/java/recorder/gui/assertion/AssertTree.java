@@ -20,7 +20,7 @@ class AssertTree extends AbstractAssert {
     AssertTree(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertTree");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur l'existance d'un noeud dans un arbre");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.tree-node"));
         this.context = assertContext;
     }
 

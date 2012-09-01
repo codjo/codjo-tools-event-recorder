@@ -17,7 +17,7 @@ class AssertFrame extends AbstractAssert {
     AssertFrame(AssertContext assertContext) {
         super(ID, GLOBAL_ASSERT);
         putValue(GuiAction.LABEL, "AssertFrame");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur le titre de la fenÍtre");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.window-title"));
         this.context = assertContext;
     }
 

@@ -5,7 +5,9 @@
  */
 package recorder.gesture;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.event.GuiEvent;
 import recorder.event.GuiEventList;
@@ -14,10 +16,11 @@ import recorder.result.StatementList;
 /**
 
  */
-public class ClickButtonTest extends TestCase {
+public class ClickButtonTest {
     private ClickButton clickGesture;
 
 
+    @Test
     public void test_simple() throws Exception {
         JButton file = new JButton("File");
         file.setName("my.button");
@@ -30,12 +33,13 @@ public class ClickButtonTest extends TestCase {
 
         clickGesture.receive(list, result);
 
-        assertEquals("Click est consommé", 0, list.size());
+        Assert.assertEquals("Click est consommé", 0, list.size());
 
-        assertEquals("<click name=\"my.button\"/>", result.toXml());
+        Assert.assertEquals("<click name=\"my.button\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_simple_noName() throws Exception {
         JButton file = new JButton("File");
 
@@ -47,12 +51,13 @@ public class ClickButtonTest extends TestCase {
 
         clickGesture.receive(list, result);
 
-        assertEquals("Click est consommé", 0, list.size());
+        Assert.assertEquals("Click est consommé", 0, list.size());
 
-        assertEquals("<click label=\"File\"/>", result.toXml());
+        Assert.assertEquals("<click label=\"File\"/>", result.toXml());
     }
 
 
+    @Test
     public void test_simple_noName_noLabel() throws Exception {
         JButton file = new JButton();
 
@@ -64,14 +69,14 @@ public class ClickButtonTest extends TestCase {
 
         clickGesture.receive(list, result);
 
-        assertEquals("Click n'est pas consommé", 1, list.size());
+        Assert.assertEquals("Click n'est pas consommé", 1, list.size());
 
-        assertEquals("", result.toXml());
+        Assert.assertEquals("", result.toXml());
     }
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         clickGesture = new ClickButton();
     }
 }

@@ -5,16 +5,19 @@
  */
 package recorder.event;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 /**
 
  */
-public class GuiEventListTest extends TestCase {
+public class GuiEventListTest {
     private GuiEventList list;
 
 
+    @Test
     public void test_findPrevious() throws Exception {
         GuiComponent srcA = toGui(new JTextField());
         GuiComponent srcB = toGui(new JTextField());
@@ -31,17 +34,18 @@ public class GuiEventListTest extends TestCase {
         list.pop();
         list.pop();
 
-        assertEquals(eventC,
-                     list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, srcA)));
-        assertEquals(eventA, list.findPrevious(new GuiEvent(GuiEventType.KEY, srcA)));
+        Assert.assertEquals(eventC,
+                            list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, srcA)));
+        Assert.assertEquals(eventA, list.findPrevious(new GuiEvent(GuiEventType.KEY, srcA)));
 
-        assertEquals(eventC, list.findPrevious(new GuiEvent(null, srcA)));
-        assertEquals(eventB, list.findPrevious(new GuiEvent(GuiEventType.KEY, null)));
+        Assert.assertEquals(eventC, list.findPrevious(new GuiEvent(null, srcA)));
+        Assert.assertEquals(eventB, list.findPrevious(new GuiEvent(GuiEventType.KEY, null)));
 
-        assertNull(list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN, null)));
+        Assert.assertNull(list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN, null)));
     }
 
 
+    @Test
     public void test_findPrevious_notSameInstance()
           throws Exception {
         JTextField swingA = new JTextField();
@@ -57,28 +61,31 @@ public class GuiEventListTest extends TestCase {
         list.pop();
         list.pop();
 
-        assertEquals(eventC,
-                     list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, sameCompA)));
+        Assert.assertEquals(eventC,
+                            list.findPrevious(new GuiEvent(GuiEventType.MENU_CLICK, sameCompA)));
     }
 
 
+    @Test
     public void test_peek_empty() throws Exception {
-        assertNull("liste vide : peek renvoie null", list.peek());
+        Assert.assertNull("liste vide : peek renvoie null", list.peek());
         GuiEvent event = new GuiEvent(GuiEventType.BUTTON_CLICK, null);
         list.addEvent(event);
-        assertSame("liste non vide : peek renvoie le sommet de la pile", event,
-                   list.peek());
+        Assert.assertSame("liste non vide : peek renvoie le sommet de la pile", event,
+                          list.peek());
         list.pop();
-        assertNull("liste de nouveau vide : peek renvoie null", list.peek());
+        Assert.assertNull("liste de nouveau vide : peek renvoie null", list.peek());
     }
 
 
+    @Test
     public void test_consumedEvent_sizeLimit_default()
           throws Exception {
-        assertEquals(100, list.getConsumedEventLimit());
+        Assert.assertEquals(100, list.getConsumedEventLimit());
     }
 
 
+    @Test
     public void test_consumedEvent_sizeLimit() throws Exception {
         list.setConsumedEventLimit(2);
 
@@ -89,18 +96,18 @@ public class GuiEventListTest extends TestCase {
 
         list.pop();
 
-        assertEquals(event1, list.findPrevious(new GuiEvent(null, event1.getSource())));
+        Assert.assertEquals(event1, list.findPrevious(new GuiEvent(null, event1.getSource())));
 
         list.pop();
         list.pop();
 
-        assertNull("La liste à atteint sa limite de 2 (l’évènement à disparu)",
-                   list.findPrevious(new GuiEvent(null, event1.getSource())));
+        Assert.assertNull("La liste à atteint sa limite de 2 (l’évènement à disparu)",
+                          list.findPrevious(new GuiEvent(null, event1.getSource())));
     }
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         list = new GuiEventList();
     }
 

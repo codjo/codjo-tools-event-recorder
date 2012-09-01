@@ -9,107 +9,116 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 /**
 
  */
-public class EventRecognizerTest extends TestCase {
+public class EventRecognizerTest {
     private EventRecognizerManager recognizerManager;
 
 
+    @Test
     public void test_notJComponent() throws Exception {
-        assertNull(recognizerManager.toGuiEvent(
+        Assert.assertNull(recognizerManager.toGuiEvent(
               new KeyEvent(new JFrame(), KeyEvent.KEY_RELEASED, 0, 0, 0, 'a')));
     }
 
 
+    @Test
     public void test_notNamed() throws Exception {
         JTextField field = new JTextField();
         KeyEvent awtEvent = new KeyEvent(field, KeyEvent.KEY_RELEASED, 0, 0, 0, 'a');
 
-        assertNull(recognizerManager.toGuiEvent(awtEvent));
+        Assert.assertNull(recognizerManager.toGuiEvent(awtEvent));
 
         field.setName("name");
-        assertNotNull(recognizerManager.toGuiEvent(awtEvent));
+        Assert.assertNotNull(recognizerManager.toGuiEvent(awtEvent));
     }
 
 
+    @Test
     public void test_mouseEvent_menu() throws Exception {
         JMenu file = new JMenu("File");
         JMenuItem open = new JMenuItem("Open");
         file.add(open);
 
-        assertNull(recognizerManager.toGuiEvent(newMouse(file, MouseEvent.MOUSE_ENTERED)));
-        assertNotNull("Event pressed sur file est reconnue",
-                      recognizerManager.toGuiEvent(newMouse(file, MouseEvent.MOUSE_PRESSED)));
-        assertNotNull("Event pressed sur open est reconnue",
-                      recognizerManager.toGuiEvent(newMouse(open, MouseEvent.MOUSE_PRESSED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(file, MouseEvent.MOUSE_ENTERED)));
+        Assert.assertNotNull("Event pressed sur file est reconnue",
+                             recognizerManager.toGuiEvent(newMouse(file, MouseEvent.MOUSE_PRESSED)));
+        Assert.assertNotNull("Event pressed sur open est reconnue",
+                             recognizerManager.toGuiEvent(newMouse(open, MouseEvent.MOUSE_PRESSED)));
     }
 
 
+    @Test
     public void test_mouseEvent_button() throws Exception {
         JButton button = new JButton();
         button.setName("my.button");
 
-        assertNull(recognizerManager.toGuiEvent(newMouse(button, MouseEvent.MOUSE_ENTERED)));
-        assertNull(recognizerManager.toGuiEvent(newMouse(button, MouseEvent.MOUSE_PRESSED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(button, MouseEvent.MOUSE_ENTERED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(button, MouseEvent.MOUSE_PRESSED)));
         GuiEvent event =
               recognizerManager.toGuiEvent(newMouse(button, MouseEvent.MOUSE_RELEASED));
-        assertNotNull("Event pressed est reconnue", event);
-        assertEquals(GuiEventType.BUTTON_CLICK, event.getType());
-        assertEquals(button, event.getSource().getSwingComponent());
+        Assert.assertNotNull("Event pressed est reconnue", event);
+        Assert.assertEquals(GuiEventType.BUTTON_CLICK, event.getType());
+        Assert.assertEquals(button, event.getSource().getSwingComponent());
     }
 
 
+    @Test
     public void test_mouseEvent_checkbox() throws Exception {
         JCheckBox checkBox = new JCheckBox();
         checkBox.setName("my.checkBox");
         checkBox.setSelected(false);
 
-        assertNull(recognizerManager.toGuiEvent(newMouse(checkBox,
-                                                         MouseEvent.MOUSE_ENTERED)));
-        assertNull(recognizerManager.toGuiEvent(newMouse(checkBox,
-                                                         MouseEvent.MOUSE_PRESSED)));
-        assertNull(recognizerManager.toGuiEvent(newMouse(checkBox,
-                                                         MouseEvent.MOUSE_RELEASED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(checkBox,
+                                                                MouseEvent.MOUSE_ENTERED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(checkBox,
+                                                                MouseEvent.MOUSE_PRESSED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(checkBox,
+                                                                MouseEvent.MOUSE_RELEASED)));
         GuiEvent event =
               recognizerManager.toGuiEvent(newMouse(checkBox, MouseEvent.MOUSE_CLICKED));
-        assertNotNull("Event clicked est reconnue", event);
-        assertEquals(GuiEventType.CHECKBOX_CLICK, event.getType());
-        assertEquals(checkBox, event.getSource().getSwingComponent());
-        assertEquals(Boolean.FALSE, event.getValue());
+        Assert.assertNotNull("Event clicked est reconnue", event);
+        Assert.assertEquals(GuiEventType.CHECKBOX_CLICK, event.getType());
+        Assert.assertEquals(checkBox, event.getSource().getSwingComponent());
+        Assert.assertEquals(Boolean.FALSE, event.getValue());
     }
 
 
+    @Test
     public void test_mouseEvent_tree() throws Exception {
         MockJTree tree = new MockJTree();
         TreePath path = new TreePath(new Object[]{"rootFolder"});
         tree.mockQueryOn(path, false);
         tree.setName("my.tree");
 
-        assertNull(recognizerManager.toGuiEvent(newMouse(tree, MouseEvent.MOUSE_ENTERED)));
-        assertNull(recognizerManager.toGuiEvent(newMouse(tree, MouseEvent.MOUSE_RELEASED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(tree, MouseEvent.MOUSE_ENTERED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(tree, MouseEvent.MOUSE_RELEASED)));
 
         GuiEvent pressedEvent =
               recognizerManager.toGuiEvent(newMouse(tree, MouseEvent.MOUSE_PRESSED));
-        assertNotNull("Event pressed est reconnue", pressedEvent);
+        Assert.assertNotNull("Event pressed est reconnue", pressedEvent);
 
-        assertEquals(GuiEventType.TREE_PRE_CLICK, pressedEvent.getType());
-        assertEquals(tree, pressedEvent.getSource().getSwingComponent());
-        assertEquals(new TreeEventData(path, false, false), pressedEvent.getValue());
+        Assert.assertEquals(GuiEventType.TREE_PRE_CLICK, pressedEvent.getType());
+        Assert.assertEquals(tree, pressedEvent.getSource().getSwingComponent());
+        Assert.assertEquals(new TreeEventData(path, false, false), pressedEvent.getValue());
 
         tree.mockQueryOn(path, true);
         GuiEvent clickEvent =
               recognizerManager.toGuiEvent(newMouse(tree, MouseEvent.MOUSE_CLICKED));
-        assertNotNull("Event clicked est reconnue", clickEvent);
+        Assert.assertNotNull("Event clicked est reconnue", clickEvent);
 
-        assertEquals(GuiEventType.TREE_CLICK, clickEvent.getType());
-        assertEquals(tree, clickEvent.getSource().getSwingComponent());
-        assertEquals(new TreeEventData(path, true, false), clickEvent.getValue());
+        Assert.assertEquals(GuiEventType.TREE_CLICK, clickEvent.getType());
+        Assert.assertEquals(tree, clickEvent.getSource().getSwingComponent());
+        Assert.assertEquals(new TreeEventData(path, true, false), clickEvent.getValue());
     }
 
 
+    @Test
     public void test_mouseEvent_table() throws Exception {
         JTable table =
               new JTable() {
@@ -125,17 +134,18 @@ public class EventRecognizerTest extends TestCase {
               };
         table.setName("my.table");
 
-        assertNull(recognizerManager.toGuiEvent(newMouse(table, MouseEvent.MOUSE_ENTERED)));
-        assertNull(recognizerManager.toGuiEvent(newMouse(table, MouseEvent.MOUSE_PRESSED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(table, MouseEvent.MOUSE_ENTERED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(table, MouseEvent.MOUSE_PRESSED)));
         GuiEvent event =
               recognizerManager.toGuiEvent(newMouse(table, MouseEvent.MOUSE_RELEASED));
-        assertNotNull("Event est reconnue", event);
+        Assert.assertNotNull("Event est reconnue", event);
 
-        assertEquals(new GuiEvent(GuiEventType.TABLE_CLICK,
-                                  GuiComponentFactory.newGuiComponent(table), Integer.decode("3")), event);
+        Assert.assertEquals(new GuiEvent(GuiEventType.TABLE_CLICK,
+                                         GuiComponentFactory.newGuiComponent(table), Integer.decode("3")), event);
     }
 
 
+    @Test
     public void test_mouseEvent_list() throws Exception {
         JList list =
               new JList() {
@@ -151,19 +161,19 @@ public class EventRecognizerTest extends TestCase {
               };
         list.setName("my.list");
 
-        assertNull(recognizerManager.toGuiEvent(newMouse(list, MouseEvent.MOUSE_ENTERED)));
-        assertNull(recognizerManager.toGuiEvent(newMouse(list, MouseEvent.MOUSE_PRESSED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(list, MouseEvent.MOUSE_ENTERED)));
+        Assert.assertNull(recognizerManager.toGuiEvent(newMouse(list, MouseEvent.MOUSE_PRESSED)));
         GuiEvent event =
               recognizerManager.toGuiEvent(newMouse(list, MouseEvent.MOUSE_RELEASED));
-        assertNotNull("Event est reconnue", event);
+        Assert.assertNotNull("Event est reconnue", event);
 
-        assertEquals(new GuiEvent(GuiEventType.LIST_CLICK,
-                                  GuiComponentFactory.newGuiComponent(list), Integer.decode("3")), event);
+        Assert.assertEquals(new GuiEvent(GuiEventType.LIST_CLICK,
+                                         GuiComponentFactory.newGuiComponent(list), Integer.decode("3")), event);
     }
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         recognizerManager = new EventRecognizerManager(new GuiComponentFactory());
     }
 

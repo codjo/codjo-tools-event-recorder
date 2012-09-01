@@ -20,7 +20,7 @@ class AssertSelected extends AbstractAssert {
     AssertSelected(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertSelected");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la sélection d'une ligne sur une JTable ou JList");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.list-selected"));
 
         this.context = assertContext;
     }

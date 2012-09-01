@@ -5,35 +5,38 @@
  */
 package recorder.event;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 /**
 
  */
-public class GuiEventTest extends TestCase {
+public class GuiEventTest {
+    @Test
     public void test_equals_badclass() throws Exception {
         GuiEvent event = newGuiEvent(GuiEventType.BUTTON_CLICK, new JButton());
-        assertFalse(event.equals("notGuiEvent"));
+        Assert.assertFalse(event.equals("notGuiEvent"));
     }
 
 
+    @Test
     public void test_equals() throws Exception {
         JButton source = new JButton();
         GuiEventType type = GuiEventType.BUTTON_CLICK;
 
-        assertTrue("Egaux", newGuiEvent(type, source).equals(newGuiEvent(type, source)));
-        assertEquals("même hashcode", newGuiEvent(type, source).hashCode(),
-                     newGuiEvent(type, source).hashCode());
+        Assert.assertTrue("Egaux", newGuiEvent(type, source).equals(newGuiEvent(type, source)));
+        Assert.assertEquals("même hashcode", newGuiEvent(type, source).hashCode(),
+                            newGuiEvent(type, source).hashCode());
 
-        assertFalse("Pas le même type",
-                    newGuiEvent(type, source).equals(newGuiEvent(GuiEventType.KEY, source)));
+        Assert.assertFalse("Pas le même type",
+                           newGuiEvent(type, source).equals(newGuiEvent(GuiEventType.KEY, source)));
 
-        assertFalse("Pas la même source",
-                    newGuiEvent(type, source).equals(newGuiEvent(type, new JButton())));
+        Assert.assertFalse("Pas la même source",
+                           newGuiEvent(type, source).equals(newGuiEvent(type, new JButton())));
 
-        assertFalse("Pas la même value",
-                    newGuiEvent(type, source, "other").equals(newGuiEvent(type, source, "value")));
+        Assert.assertFalse("Pas la même value",
+                           newGuiEvent(type, source, "other").equals(newGuiEvent(type, source, "value")));
     }
 
 

@@ -5,32 +5,38 @@
  */
 package recorder.gui.assertion;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
 
  */
-public class AssertFrameTest extends TestCase {
+public class AssertFrameTest {
     private AssertFrame assertFrame;
     private MockAssertContext assertContext;
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.GLOBAL_ASSERT, assertFrame.getAssertType());
+        Assert.assertEquals(AbstractAssert.GLOBAL_ASSERT, assertFrame.getAssertType());
     }
 
 
+    @Test
     public void test_assert_jframe() throws Exception {
         assertTitle("Options", new JFrame("Options"));
     }
 
 
+    @Test
     public void test_assert_jdialog() throws Exception {
         assertTitle("Options", new JDialog(new JFrame(), "Options"));
     }
 
 
+    @Test
     public void test_assert_noParent() throws Exception {
         JTextField source = new JTextField();
 
@@ -39,15 +45,17 @@ public class AssertFrameTest extends TestCase {
         assertFrame.execute();
 
         Statement resultAssert = assertContext.getPostedAssert();
-        assertNull("un assertion est défini", resultAssert);
+        Assert.assertNull("an assertion has been defined", resultAssert);
     }
 
 
+    @Test
     public void test_assert_internalframe() throws Exception {
         assertTitle("Options", new JInternalFrame("Options"));
     }
 
 
+    @Test
     public void test_update() throws Exception {
         JInternalFrame frame = new JInternalFrame("Options");
         JTextField source = new JTextField();
@@ -57,13 +65,13 @@ public class AssertFrameTest extends TestCase {
 
         assertFrame.update();
 
-        assertEquals("AssertFrame titre='Options'",
-                     assertFrame.getValue(AssertFrame.LABEL));
+        Assert.assertEquals("AssertFrame titre='Options'",
+                            assertFrame.getValue(AssertFrame.LABEL));
     }
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         assertContext = new MockAssertContext();
         assertFrame = new AssertFrame(assertContext);
     }
@@ -78,8 +86,8 @@ public class AssertFrameTest extends TestCase {
         assertFrame.execute();
 
         Statement resultAssert = assertContext.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertFrame title=\"" + expectedTitle + "\"/>",
-                     resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertFrame title=\"" + expectedTitle + "\"/>",
+                            resultAssert.toXml());
     }
 }

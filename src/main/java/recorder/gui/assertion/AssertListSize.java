@@ -20,7 +20,7 @@ class AssertListSize extends AbstractAssert {
     AssertListSize(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertListSize");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la taille d'une JTable, JList ou JCombobox");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.list-size"));
 
         this.context = assertContext;
     }

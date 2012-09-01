@@ -19,7 +19,7 @@ class AssertTable extends AbstractAssert {
     AssertTable(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertTable");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la valeur d'une cellule d'une JTable");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.table-row"));
         this.context = assertContext;
     }
 

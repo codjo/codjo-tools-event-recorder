@@ -126,7 +126,7 @@ public class RecorderLogic {
         StartAction() {
             super("record.start");
             putValue(GuiAction.ICON_ID, IconsManager.RECORD_START);
-            putValue(GuiAction.TOOLTIP, "Enregistre les actions de l'utilisateur");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-record"));
         }
 
 
@@ -141,7 +141,7 @@ public class RecorderLogic {
         StopAction() {
             super("record.stop");
             putValue(GuiAction.ICON_ID, IconsManager.RECORD_STOP);
-            putValue(GuiAction.TOOLTIP, "Stop l'enregistrement des actions utilisateur");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-stop"));
         }
 
 
@@ -156,7 +156,7 @@ public class RecorderLogic {
         ClearScriptAction() {
             super("script.clear");
             putValue(GuiAction.ICON_ID, IconsManager.CLEAR);
-            putValue(GuiAction.TOOLTIP, "Efface le script courant");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-clear"));
         }
 
 
@@ -193,13 +193,11 @@ public class RecorderLogic {
         private void updateIconAndTooltip() {
             if (highlight) {
                 putValue(GuiAction.ICON_ID, IconsManager.HIGHLIGHT_STOP);
-                putValue(GuiAction.TOOLTIP,
-                         "Stop la mise en surbrillance des composants GUI testable");
+                putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.highlight-stop"));
             }
             else {
                 putValue(GuiAction.ICON_ID, IconsManager.HIGHLIGHT_START);
-                putValue(GuiAction.TOOLTIP,
-                         "Mise en surbrillance des composants GUI testable");
+                putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.highlight-start"));
             }
         }
 
@@ -227,7 +225,7 @@ public class RecorderLogic {
         RemoveLastGestureAction() {
             super("script.clear.last");
             putValue(GuiAction.ICON_ID, IconsManager.REMOVE_LAST);
-            putValue(GuiAction.TOOLTIP, "Supprime le dernier »l»ment du script");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-remove"));
             setEnabled(false);
             recorder.addRecorderListener(this);
         }

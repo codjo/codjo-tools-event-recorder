@@ -6,30 +6,34 @@
 package recorder.gui.assertion;
 import java.awt.*;
 import javax.swing.*;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
 
  */
-public class AssertSelectedTest extends TestCase {
+public class AssertSelectedTest {
     private static final int SELECTED_ROW = 1;
     private AssertSelected assertSelected;
     private MockAssertContext context;
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertSelected = new AssertSelected(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertSelected.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertSelected.getAssertType());
     }
 
 
+    @Test
     public void test_assert_selected_table() throws Exception {
         JTable source = buildJTable(SELECTED_ROW, "Ma table");
 
@@ -37,6 +41,7 @@ public class AssertSelectedTest extends TestCase {
     }
 
 
+    @Test
     public void test_assert_selected_list() throws Exception {
         JList source = buildJList(SELECTED_ROW, "Ma Liste");
 
@@ -53,12 +58,13 @@ public class AssertSelectedTest extends TestCase {
         assertSelected.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini pour " + name, resultAssert);
-        assertEquals("<assertSelected name=\"" + name + "\" row=\"" + SELECTED_ROW
-                     + "\"/>", resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini pour " + name, resultAssert);
+        Assert.assertEquals("<assertSelected name=\"" + name + "\" row=\"" + SELECTED_ROW
+                            + "\"/>", resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_notselected() throws Exception {
         JTable source = buildJTable(2, "Ma table");
 
@@ -69,12 +75,13 @@ public class AssertSelectedTest extends TestCase {
         assertSelected.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertSelected name=\"Ma table\" row=\"2\" expected=\"false\"/>",
-                     resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertSelected name=\"Ma table\" row=\"2\" expected=\"false\"/>",
+                            resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -82,25 +89,28 @@ public class AssertSelectedTest extends TestCase {
         assertSelected.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("un assertion n'est pas défini", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertSelected.update();
 
-        assertFalse("Assert disable", assertSelected.isEnabled());
+        Assert.assertFalse("Assert disable", assertSelected.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_table() throws Exception {
         assertEnabledTest(buildJTable(2, "Ma table"));
     }
 
 
+    @Test
     public void test_update_enable_list() throws Exception {
         assertEnabledTest(buildJList(2, "Ma List"));
     }
@@ -111,7 +121,7 @@ public class AssertSelectedTest extends TestCase {
 
         assertSelected.update();
 
-        assertTrue("Assert ensable", assertSelected.isEnabled());
+        Assert.assertTrue("Assert ensable", assertSelected.isEnabled());
     }
 
 

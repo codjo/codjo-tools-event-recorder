@@ -20,7 +20,7 @@ class AssertList extends AbstractAssert {
     AssertList(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertList");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la valeur d'une ligne d'une JList");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.list-row"));
 
         this.context = assertContext;
     }

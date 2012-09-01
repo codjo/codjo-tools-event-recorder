@@ -20,7 +20,7 @@ class AssertValue extends AbstractAssert {
     AssertValue(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertValue");
-        putValue(GuiAction.TOOLTIP, "Ajoute un 'assertion' sur la valeur d'un JTextComponent");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.value"));
         this.context = assertContext;
     }
 
