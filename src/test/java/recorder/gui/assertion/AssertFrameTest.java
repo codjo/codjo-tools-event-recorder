@@ -1,39 +1,55 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.assertion;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JTextField;
-import javax.swing.RootPaneContainer;
-import junit.framework.TestCase;
+import javax.swing.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertFrame}.
+
  */
-public class AssertFrameTest extends TestCase {
+public class AssertFrameTest {
     private AssertFrame assertFrame;
     private MockAssertContext assertContext;
 
+
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.GLOBAL_ASSERT, assertFrame.getAssertType());
+        Assert.assertEquals(AbstractAssert.GLOBAL_ASSERT, assertFrame.getAssertType());
     }
 
 
+    @Test
     public void test_assert_jframe() throws Exception {
         assertTitle("Options", new JFrame("Options"));
     }
 
 
+    @Test
     public void test_assert_jdialog() throws Exception {
         assertTitle("Options", new JDialog(new JFrame(), "Options"));
     }
 
 
+    @Test
     public void test_assert_noParent() throws Exception {
         JTextField source = new JTextField();
 
@@ -42,15 +58,17 @@ public class AssertFrameTest extends TestCase {
         assertFrame.execute();
 
         Statement resultAssert = assertContext.getPostedAssert();
-        assertNull("un assertion est défini", resultAssert);
+        Assert.assertNull("an assertion has been defined", resultAssert);
     }
 
 
+    @Test
     public void test_assert_internalframe() throws Exception {
         assertTitle("Options", new JInternalFrame("Options"));
     }
 
 
+    @Test
     public void test_update() throws Exception {
         JInternalFrame frame = new JInternalFrame("Options");
         JTextField source = new JTextField();
@@ -60,12 +78,13 @@ public class AssertFrameTest extends TestCase {
 
         assertFrame.update();
 
-        assertEquals("AssertFrame titre='Options'",
-            assertFrame.getValue(AssertFrame.LABEL));
+        Assert.assertEquals("AssertFrame titre='Options'",
+                            assertFrame.getValue(AssertFrame.LABEL));
     }
 
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         assertContext = new MockAssertContext();
         assertFrame = new AssertFrame(assertContext);
     }
@@ -80,8 +99,8 @@ public class AssertFrameTest extends TestCase {
         assertFrame.execute();
 
         Statement resultAssert = assertContext.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertFrame title=\"" + expectedTitle + "\"/>",
-            resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertFrame title=\"" + expectedTitle + "\"/>",
+                            resultAssert.toXml());
     }
 }

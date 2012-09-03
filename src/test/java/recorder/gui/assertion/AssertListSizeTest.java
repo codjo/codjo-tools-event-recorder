@@ -1,38 +1,53 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.assertion;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import junit.framework.TestCase;
+import javax.swing.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertListSize}.
+
  */
-public class AssertListSizeTest extends TestCase {
+public class AssertListSizeTest {
     private static final int EXPECTED_SIZE = 1;
     private AssertListSize assertListSize;
     private MockAssertContext context;
 
-    protected void setUp() throws Exception {
+
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertListSize = new AssertListSize(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertListSize.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertListSize.getAssertType());
     }
 
 
+    @Test
     public void test_assert_size_table() throws Exception {
         String name = "Ma table";
         JTable source = buildJTable(EXPECTED_SIZE, name);
@@ -41,17 +56,19 @@ public class AssertListSizeTest extends TestCase {
     }
 
 
+    @Test
     public void test_assert_size_list() throws Exception {
-        JList source = buildJList(EXPECTED_SIZE, "Ma Liste");
+        JList source = buildJList(EXPECTED_SIZE, "A List");
 
-        assertSizeTest(source, "Ma Liste");
+        assertSizeTest(source, "A List");
     }
 
 
+    @Test
     public void test_assert_size_combo() throws Exception {
-        JComboBox source = buildJCombo(EXPECTED_SIZE, "Ma combo");
+        JComboBox source = buildJCombo(EXPECTED_SIZE, "My combo");
 
-        assertSizeTest(source, "Ma combo");
+        assertSizeTest(source, "My combo");
     }
 
 
@@ -62,12 +79,13 @@ public class AssertListSizeTest extends TestCase {
         assertListSize.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini pour " + name, resultAssert);
-        assertEquals("<assertListSize name=\"" + name + "\" expected=\"" + EXPECTED_SIZE
-            + "\"/>", resultAssert.toXml());
+        Assert.assertNotNull("An assertion should have been defined for " + name, resultAssert);
+        Assert.assertEquals("<assertListSize name=\"" + name + "\" expected=\"" + EXPECTED_SIZE
+                            + "\"/>", resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -75,30 +93,34 @@ public class AssertListSizeTest extends TestCase {
         assertListSize.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("An assertion should have been defined", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertListSize.update();
 
-        assertFalse("Assert disable", assertListSize.isEnabled());
+        Assert.assertFalse("Assert disable", assertListSize.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_table() throws Exception {
         assertEnabledTest(buildJTable(2, "Ma table"));
     }
 
 
+    @Test
     public void test_update_enable_list() throws Exception {
         assertEnabledTest(buildJList(2, "Ma List"));
     }
 
 
+    @Test
     public void test_update_enable_combo() throws Exception {
         assertEnabledTest(buildJCombo(2, "Ma Combo"));
     }
@@ -109,7 +131,7 @@ public class AssertListSizeTest extends TestCase {
 
         assertListSize.update();
 
-        assertTrue("Assert enable", assertListSize.isEnabled());
+        Assert.assertTrue("Assert enable", assertListSize.isEnabled());
     }
 
 

@@ -1,14 +1,25 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder;
-import java.awt.AWTEvent;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import recorder.component.GuiComponentFactory;
 import recorder.event.EventRecognizerManager;
@@ -18,7 +29,7 @@ import recorder.gesture.GestureManager;
 import recorder.result.Statement;
 import recorder.result.StatementList;
 /**
- * Enregistre les actions utilisateurs sur les composants nommés.
+ * Record user interaction.
  */
 public class Recorder implements AWTEventListener {
     private GuiEventList simpleEventList = new GuiEventList();
@@ -27,10 +38,12 @@ public class Recorder implements AWTEventListener {
     private final GestureManager gestureManager;
     private final EventRecognizerManager recognizerManager;
 
+
     public Recorder(GuiComponentFactory factory) {
         recognizerManager = new EventRecognizerManager(factory);
         gestureManager = new GestureManager();
     }
+
 
     public void startRecord() {
         Toolkit.getDefaultToolkit().addAWTEventListener(this, Long.MAX_VALUE);
@@ -109,12 +122,14 @@ public class Recorder implements AWTEventListener {
         return recognizerManager.getGuiComponentFactory();
     }
 
+
     private static class RecorderEventSupport {
-        private List listenerList;
+        private List<RecorderListener> listenerList;
+
 
         public void addRecorderListener(RecorderListener listener) {
             if (listenerList == null) {
-                listenerList = new ArrayList();
+                listenerList = new ArrayList<RecorderListener>();
             }
             listenerList.add(listener);
         }
@@ -133,8 +148,7 @@ public class Recorder implements AWTEventListener {
                 return;
             }
 
-            for (Iterator iter = listenerList.iterator(); iter.hasNext();) {
-                RecorderListener listener = (RecorderListener)iter.next();
+            for (RecorderListener listener : listenerList) {
                 listener.recorderUpdate();
             }
         }

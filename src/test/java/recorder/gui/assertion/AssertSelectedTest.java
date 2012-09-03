@@ -1,37 +1,52 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.assertion;
-import java.awt.Point;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import junit.framework.TestCase;
+import java.awt.*;
+import javax.swing.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertSelected}.
+
  */
-public class AssertSelectedTest extends TestCase {
+public class AssertSelectedTest {
     private static final int SELECTED_ROW = 1;
     private AssertSelected assertSelected;
     private MockAssertContext context;
 
-    protected void setUp() throws Exception {
+
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertSelected = new AssertSelected(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertSelected.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertSelected.getAssertType());
     }
 
 
+    @Test
     public void test_assert_selected_table() throws Exception {
         JTable source = buildJTable(SELECTED_ROW, "Ma table");
 
@@ -39,6 +54,7 @@ public class AssertSelectedTest extends TestCase {
     }
 
 
+    @Test
     public void test_assert_selected_list() throws Exception {
         JList source = buildJList(SELECTED_ROW, "Ma Liste");
 
@@ -47,7 +63,7 @@ public class AssertSelectedTest extends TestCase {
 
 
     private void assertSelectedTest(JComponent source, ListSelectionModel selectionModel,
-        String name) {
+                                    String name) {
         selectionModel.setSelectionInterval(SELECTED_ROW, SELECTED_ROW);
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
         context.setPoint(new Point(1, 1));
@@ -55,12 +71,13 @@ public class AssertSelectedTest extends TestCase {
         assertSelected.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini pour " + name, resultAssert);
-        assertEquals("<assertSelected name=\"" + name + "\" row=\"" + SELECTED_ROW
-            + "\"/>", resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini pour " + name, resultAssert);
+        Assert.assertEquals("<assertSelected name=\"" + name + "\" row=\"" + SELECTED_ROW
+                            + "\"/>", resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_notselected() throws Exception {
         JTable source = buildJTable(2, "Ma table");
 
@@ -71,12 +88,13 @@ public class AssertSelectedTest extends TestCase {
         assertSelected.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini", resultAssert);
-        assertEquals("<assertSelected name=\"Ma table\" row=\"2\" expected=\"false\"/>",
-            resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini", resultAssert);
+        Assert.assertEquals("<assertSelected name=\"Ma table\" row=\"2\" expected=\"false\"/>",
+                            resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -84,25 +102,28 @@ public class AssertSelectedTest extends TestCase {
         assertSelected.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("un assertion n'est pas défini", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertSelected.update();
 
-        assertFalse("Assert disable", assertSelected.isEnabled());
+        Assert.assertFalse("Assert disable", assertSelected.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_table() throws Exception {
         assertEnabledTest(buildJTable(2, "Ma table"));
     }
 
 
+    @Test
     public void test_update_enable_list() throws Exception {
         assertEnabledTest(buildJList(2, "Ma List"));
     }
@@ -113,17 +134,18 @@ public class AssertSelectedTest extends TestCase {
 
         assertSelected.update();
 
-        assertTrue("Assert ensable", assertSelected.isEnabled());
+        Assert.assertTrue("Assert ensable", assertSelected.isEnabled());
     }
 
 
     private JTable buildJTable(final int rowAtPoint, String name) {
         JTable source =
-            new JTable(3, 2) {
-                public int rowAtPoint(Point point) {
-                    return rowAtPoint;
-                }
-            };
+              new JTable(3, 2) {
+                  @Override
+                  public int rowAtPoint(Point point) {
+                      return rowAtPoint;
+                  }
+              };
         source.setName(name);
         return source;
     }
@@ -131,11 +153,12 @@ public class AssertSelectedTest extends TestCase {
 
     private JList buildJList(final int rowAtPoint, String name) {
         JList list =
-            new JList() {
-                public int locationToIndex(Point point) {
-                    return rowAtPoint;
-                }
-            };
+              new JList() {
+                  @Override
+                  public int locationToIndex(Point point) {
+                      return rowAtPoint;
+                  }
+              };
         list.setName(name);
         return list;
     }

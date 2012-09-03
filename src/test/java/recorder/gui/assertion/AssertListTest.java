@@ -1,37 +1,54 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.assertion;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Arrays;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTextField;
-import junit.framework.TestCase;
+import javax.swing.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.component.GuiComponentFactory;
 import recorder.result.Statement;
 /**
- * Classe de test de {@link AssertList}.
+
  */
-public class AssertListTest extends TestCase {
+public class AssertListTest {
     private static final int ROW = 1;
     private static final Object VALUE = "expectedValue";
     private AssertList assertList;
     private MockAssertContext context;
 
-    protected void setUp() throws Exception {
+
+    @Before
+    public void setUp() throws Exception {
         context = new MockAssertContext();
         assertList = new AssertList(context);
     }
 
 
+    @Test
     public void test_type() throws Exception {
-        assertEquals(AbstractAssert.COMPONENT_ASSERT, assertList.getAssertType());
+        Assert.assertEquals(AbstractAssert.COMPONENT_ASSERT, assertList.getAssertType());
     }
 
 
+    @Test
     public void test_assert_list() throws Exception {
         JList source = buildJList(ROW, VALUE, "Ma Liste");
 
@@ -46,12 +63,13 @@ public class AssertListTest extends TestCase {
         assertList.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNotNull("un assertion est défini pour " + name, resultAssert);
-        assertEquals("<assertList name=\"" + name + "\" expected=\"" + VALUE
-            + "\" row=\"" + ROW + "\"/>", resultAssert.toXml());
+        Assert.assertNotNull("un assertion est défini pour " + name, resultAssert);
+        Assert.assertEquals("<assertList name=\"" + name + "\" expected=\"" + VALUE
+                            + "\" row=\"" + ROW + "\"/>", resultAssert.toXml());
     }
 
 
+    @Test
     public void test_assert_bad_source() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
@@ -59,20 +77,22 @@ public class AssertListTest extends TestCase {
         assertList.execute();
 
         Statement resultAssert = context.getPostedAssert();
-        assertNull("un assertion n'est pas défini", resultAssert);
+        Assert.assertNull("un assertion n'est pas défini", resultAssert);
     }
 
 
+    @Test
     public void test_update_disable() throws Exception {
         JTextField source = new JTextField();
         context.setGuiComponent(GuiComponentFactory.newGuiComponent(source));
 
         assertList.update();
 
-        assertFalse("Assert disable", assertList.isEnabled());
+        Assert.assertFalse("Assert disable", assertList.isEnabled());
     }
 
 
+    @Test
     public void test_update_enable_list() throws Exception {
         assertEnabledTest(buildJList(2, VALUE, "Ma List"));
     }
@@ -83,7 +103,7 @@ public class AssertListTest extends TestCase {
 
         assertList.update();
 
-        assertTrue("Assert ensable", assertList.isEnabled());
+        Assert.assertTrue("Assert ensable", assertList.isEnabled());
     }
 
 
@@ -93,11 +113,12 @@ public class AssertListTest extends TestCase {
         content[rowAtPoint] = value;
 
         JList list =
-            new JList(content) {
-                public int locationToIndex(Point point) {
-                    return rowAtPoint;
-                }
-            };
+              new JList(content) {
+                  @Override
+                  public int locationToIndex(Point point) {
+                      return rowAtPoint;
+                  }
+              };
         list.setName(name);
         return list;
     }

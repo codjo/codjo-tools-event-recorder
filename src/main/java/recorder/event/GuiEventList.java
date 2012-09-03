@@ -1,21 +1,34 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.event;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-/**
- */
 public class GuiEventList {
-    private List eventList = new ArrayList();
-    private List consumedList = new ArrayList();
+    private List<GuiEvent> eventList = new ArrayList<GuiEvent>();
+    private List<GuiEvent> consumedList = new ArrayList<GuiEvent>();
     private long consumedEventLimit = 100;
 
-    public GuiEventList() {}
+
+    public GuiEventList() {
+    }
+
 
     public long size() {
         return eventList.size();
@@ -28,12 +41,12 @@ public class GuiEventList {
 
 
     public GuiEvent pop() {
-        Object removedEvent = eventList.remove(0);
+        GuiEvent removedEvent = eventList.remove(0);
         consumedList.add(0, removedEvent);
         if (consumedList.size() >= getConsumedEventLimit()) {
             consumedList.remove(consumedList.size() - 1);
         }
-        return (GuiEvent)removedEvent;
+        return removedEvent;
     }
 
 
@@ -41,13 +54,12 @@ public class GuiEventList {
         if (size() == 0) {
             return null;
         }
-        return (GuiEvent)eventList.get(0);
+        return eventList.get(0);
     }
 
 
     public GuiEvent findPrevious(GuiEvent mask) {
-        for (Iterator iter = consumedList.iterator(); iter.hasNext();) {
-            GuiEvent event = (GuiEvent)iter.next();
+        for (GuiEvent event : consumedList) {
             if (match(mask, event)) {
                 return event;
             }
@@ -58,7 +70,7 @@ public class GuiEventList {
 
     private boolean match(GuiEvent mask, GuiEvent event) {
         return (mask.getType() == null || mask.getType() == event.getType())
-        && (mask.getSource() == null || mask.getSource().equals(event.getSource()));
+               && (mask.getSource() == null || mask.getSource().equals(event.getSource()));
     }
 
 

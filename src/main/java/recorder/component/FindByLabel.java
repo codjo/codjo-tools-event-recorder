@@ -1,25 +1,32 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.component;
-import javax.swing.AbstractButton;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Stratégie de recherche par label. Cette stratégie permet de trouver un composant par
- * le label.
- * 
- * <p>
- * <b>NB:</b>Pour l'instant seul les JMenuItem sont pris en compte.
- * </p>
+ * Search strategy using a GUI component label.
  *
- * @version $Revision: 1.2 $
+ * <p> <b>NB:</b>Only JMenuItem are handled by this strategy. </p>
  */
 class FindByLabel implements FindStrategy {
     public boolean canFound(JComponent swingComponent) {
         return swingComponent instanceof AbstractButton
-        && isEmpty(((AbstractButton)swingComponent).getText());
+               && isEmpty(((AbstractButton)swingComponent).getText());
     }
 
 

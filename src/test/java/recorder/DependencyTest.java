@@ -1,29 +1,40 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import jdepend.framework.JDepend;
 import jdepend.framework.JavaPackage;
 import jdepend.framework.PackageFilter;
 import junit.framework.TestCase;
 /**
- * Test les dépendances de cette API en utilisant JDepend.
+ * Test les dÈpendances de cette API en utilisant JDepend.
  */
 public class DependencyTest extends TestCase {
     private JDepend jdepend;
 
+
     /**
-     * Test les dépendances inter-package.
-     *
-     * @throws IOException
+     * Test les dÈpendances inter-package.
      */
     public void test_dependencyConstraint() throws IOException {
         // Analyse
@@ -31,59 +42,61 @@ public class DependencyTest extends TestCase {
 
         // Contraintes
         asserDependencytConstraint("recorder",
-            new String[] {
-                "recorder.event", "recorder.result", "recorder.component",
-                "recorder.gesture"
-            });
+                                   new String[]{
+                                         "recorder.event", "recorder.result", "recorder.component",
+                                         "recorder.gesture"
+                                   });
 
-        asserDependencytConstraint("recorder.event", new String[] {"recorder.component"});
+        asserDependencytConstraint("recorder.event", new String[]{"recorder.component"});
 
         asserDependencytConstraint("recorder.gesture",
-            new String[] {"recorder.event", "recorder.component", "recorder.result"});
+                                   new String[]{"recorder.event", "recorder.component", "recorder.result"});
 
-        asserDependencytConstraint("recorder.result", new String[] {});
+        asserDependencytConstraint("recorder.result", new String[]{});
 
-        asserDependencytConstraint("recorder.component", new String[] {});
+        asserDependencytConstraint("recorder.component", new String[]{});
 
         // Pas de cycle
-        assertFalse("Les cycles ne sont pas autorisés", jdepend.containsCycles());
+        assertFalse("Les cycles ne sont pas autorisÈs", jdepend.containsCycles());
     }
 
 
     private void asserDependencytConstraint(String javaPackage, String[] dependeciesArray) {
-        List expectedDepencies = Arrays.asList(dependeciesArray);
+        List<String> expectedDepencies = Arrays.asList(dependeciesArray);
         JavaPackage jPackage = jdepend.getPackage(javaPackage);
         if (jPackage == null) {
             throw new NullPointerException("Package '" + javaPackage + "' n'existe pas !");
         }
-        List actualList = dependencyToList(jPackage);
+        List<String> actualList = dependencyToList(jPackage);
 
         StringBuffer error = new StringBuffer();
 
-        List notActual = new ArrayList(expectedDepencies);
+        List<String> notActual = new ArrayList<String>(expectedDepencies);
         notActual.removeAll(actualList);
         if (!notActual.isEmpty()) {
-            error.append("\n\t\tNon présente " + notActual);
+            error.append("\n\t\tNon prÈsente ");
+            error.append(notActual);
         }
 
-        List notExpected = new ArrayList(actualList);
+        List<String> notExpected = new ArrayList<String>(actualList);
         notExpected.removeAll(expectedDepencies);
         if (!notExpected.isEmpty()) {
-            error.append("\n\t\tSupplément " + notExpected);
+            error.append("\n\t\tSupplÈment ");
+            error.append(notExpected);
         }
 
         if (error.length() != 0) {
-            fail("[" + javaPackage + "] Dépendance en erreur !" + error);
+            fail("[" + javaPackage + "] DÈpendance en erreur !" + error);
         }
     }
 
 
-    private List dependencyToList(JavaPackage aPackage) {
-        List list = new ArrayList();
+    private List<String> dependencyToList(JavaPackage aPackage) {
+        List<String> list = new ArrayList<String>();
 
         Collection efferents = aPackage.getEfferents();
-        for (Iterator iter = efferents.iterator(); iter.hasNext();) {
-            JavaPackage depPackage = (JavaPackage)iter.next();
+        for (Object efferent : efferents) {
+            JavaPackage depPackage = (JavaPackage)efferent;
             list.add(depPackage.getName());
         }
 
@@ -91,6 +104,7 @@ public class DependencyTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() throws IOException {
         jdepend = new JDepend();
         jdepend.addDirectory("target/classes");

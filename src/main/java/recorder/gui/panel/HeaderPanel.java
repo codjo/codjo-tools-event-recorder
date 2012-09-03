@@ -1,68 +1,48 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
- */
-/*
- * Copyright (c) 2003 JGoodies Karsten Lentzsch. All Rights Reserved.
+ *    Copyright (C) 2005, 2012 by codjo.net
  *
- * This software is the proprietary information of Karsten Lentzsch.
- * Use is subject to license terms.
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.panel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import java.awt.*;
+import javax.swing.*;
 import recorder.gui.border.RaisedHeaderBorder;
 /**
- * Panneau avec une bordure ombré ayant un titre avec icon et toolbar.
+ * Panel with a shadow border containing a title with an icon and a toolbar.
  */
 public class HeaderPanel extends GradientPanel {
     private JLabel titleLabel;
     private boolean isSelected;
 
-    /**
-     * Constructeur de <code>HeaderPanel</code>.
-     */
+
     public HeaderPanel() {
         this(null, "title", null);
     }
 
 
-    /**
-     * Constructeur de <code>HeaderPanel</code>.
-     *
-     * @param title Titre du panneau.
-     */
     public HeaderPanel(String title) {
         this(null, title, null);
     }
 
 
-    /**
-     * Constructeur de <code>HeaderPanel</code>.
-     *
-     * @param title Titre du panneau.
-     * @param bar La toolbar
-     */
     public HeaderPanel(String title, JToolBar bar) {
         this(null, title, bar);
     }
 
 
-    /**
-     * Constructeur de <code>HeaderPanel</code>.
-     *
-     * @param icon Icon du titre
-     * @param title Titre du panneau.
-     * @param bar La toolbar
-     */
     public HeaderPanel(Icon icon, String title, JToolBar bar) {
         super(new BorderLayout());
         this.isSelected = false;
@@ -71,15 +51,16 @@ public class HeaderPanel extends GradientPanel {
         this.titleLabel.setOpaque(false);
 
         setBackground(getHeaderBackground());
-        //@todo a remplacer par un INSET sur RaisedHeaderBorder (cf. EmptyBorder)
+        //@todo to be replaced by an INSET on the RaisedHeaderBorder (cf. EmptyBorder)
         setBorder(BorderFactory.createCompoundBorder(new RaisedHeaderBorder(),
-                BorderFactory.createEmptyBorder(3, 4, 3, 1)));
+                                                     BorderFactory.createEmptyBorder(3, 4, 3, 1)));
 
         add(this.titleLabel, BorderLayout.WEST);
         setToolBar(bar);
         setSelected(true);
         updateHeader();
     }
+
 
     public Icon getIcon() {
         return titleLabel.getIcon();
@@ -105,21 +86,11 @@ public class HeaderPanel extends GradientPanel {
     }
 
 
-    /**
-     * Retourne la toolbar du panneau.
-     *
-     * @return La toolbar (ou <code>null</code> si aucune).
-     */
     public JToolBar getToolBar() {
         return getComponentCount() > 1 ? (JToolBar)getComponent(1) : null;
     }
 
 
-    /**
-     * Positionne la toolbar.
-     *
-     * @param newToolBar La nouvelle toolbar
-     */
     public void setToolBar(JToolBar newToolBar) {
         JToolBar oldToolBar = getToolBar();
         if (oldToolBar == newToolBar) {
@@ -138,24 +109,11 @@ public class HeaderPanel extends GradientPanel {
     }
 
 
-    /**
-     * Indique si le panneau est selectionné (ie actif). Lorsque le panneau est actif, le
-     * fond contient un dégradé.
-     *
-     * @return boolean  <code>true</code> si le panneau est actif.
-     */
     public boolean isSelected() {
         return isSelected;
     }
 
 
-    /**
-     * Positione l'etat du panneau.
-     *
-     * @param newValue <code>true</code> si le panneau est actif
-     *
-     * @see #isSelected()
-     */
     public void setSelected(boolean newValue) {
         boolean oldValue = isSelected();
         isSelected = newValue;
@@ -173,8 +131,8 @@ public class HeaderPanel extends GradientPanel {
 
     private Color getTextForeground(boolean selected) {
         Color color =
-            UIManager.getColor(selected ? "HeaderPanel.activeTitleForeground"
-                                        : "HeaderPanel.inactiveTitleForeground");
+              UIManager.getColor(selected ? "HeaderPanel.activeTitleForeground"
+                                          : "HeaderPanel.inactiveTitleForeground");
         if (color != null) {
             return color;
         }

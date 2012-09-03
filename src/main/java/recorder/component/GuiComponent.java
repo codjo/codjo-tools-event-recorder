@@ -1,25 +1,40 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.component;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Abstraction représentant un composant graphique.
+ * Represents a GUI component.
  */
 public class GuiComponent {
     private static final NoFindStrategy NO_FIND_STRATEGY = new NoFindStrategy();
     private static final FindStrategy[] FIND_STRATEGY =
-        new FindStrategy[] {
-            new FindByName(), new FindByLabel(), new FindByAccessbleContext(),
-            NO_FIND_STRATEGY
-        };
+          new FindStrategy[]{
+                new FindByName(), new FindByLabel(), new FindByAccessibleContext(),
+                NO_FIND_STRATEGY
+          };
     private JComponent swingComponent;
+
 
     GuiComponent(JComponent swingComponent) {
         this.swingComponent = swingComponent;
     }
+
 
     public boolean isFindable() {
         return NO_FIND_STRATEGY != determineFindStrategy();
@@ -39,6 +54,7 @@ public class GuiComponent {
             return false;
         }
 
+        //noinspection RedundantIfStatement
         if (!swingComponent.equals(((GuiComponent)obj).swingComponent)) {
             return false;
         }
@@ -90,29 +106,27 @@ public class GuiComponent {
 
 
     private FindStrategy determineFindStrategy() {
-        for (int idx = 0; idx < FIND_STRATEGY.length; idx++) {
-            FindStrategy findStrategy = FIND_STRATEGY[idx];
+        for (FindStrategy findStrategy : FIND_STRATEGY) {
             if (findStrategy.canFound(swingComponent)) {
                 return findStrategy;
             }
         }
-        throw new IllegalStateException(
-            "Cas impossible ! a cause de la règle NoFindStrategy qui est toujours valide");
+        throw new IllegalStateException("Should not happen ! Rule 'NoFindStrategy' is always valid");
     }
 
 
     private static FindStrategy getFindStrategy(FindStrategyId strategyId) {
-        for (int idx = 0; idx < FIND_STRATEGY.length; idx++) {
-            FindStrategy findStrategy = FIND_STRATEGY[idx];
+        for (FindStrategy findStrategy : FIND_STRATEGY) {
             if (strategyId.equals(findStrategy.getStrategyId())) {
                 return findStrategy;
             }
         }
-        throw new IllegalStateException("Stratégie de recherche inconnue " + strategyId);
+        throw new IllegalStateException("Unknown search strategy " + strategyId);
     }
 
+
     /**
-     * Stratégie de recherche representant le cas ou le composant est inretrouvable.
+     * StratÈgie de recherche representant le cas ou le composant est inretrouvable.
      */
     private static class NoFindStrategy implements FindStrategy {
         public boolean canFound(JComponent swingComponent) {

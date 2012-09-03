@@ -1,14 +1,25 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -25,21 +36,11 @@ import recorder.gui.icons.IconsManager;
 import recorder.gui.script.ScriptLogic;
 import recorder.gui.util.ComponentHighlighter;
 import recorder.gui.util.HighlightListener;
-/**
- */
 public class RecorderLogic {
     private static final Logger LOG = Logger.getLogger(RecorderLogic.class);
     private RecorderGui gui;
     private GuiActionManager actionManager = new GuiActionManager();
-    private AssertManager assertManager;
     private Recorder recorder;
-    private GuiComponentFactory factory = new GuiComponentFactory();
-    private RecorderListener listener =
-        new RecorderListener() {
-            public void recorderUpdate() {
-                gui.display(recorder.getGestureResultList());
-            }
-        };
     private static final String RECORD_START = "record.start";
     private static final String RECORD_STOP = "record.stop";
     private static final String LOG_CLEAR = "log.clear";
@@ -47,9 +48,11 @@ public class RecorderLogic {
     private static final String SCRIPT_CLEAR_LAST = "script.clear.last";
     private static final String HIGHLIGHT = "highlight";
 
+
     public RecorderLogic() {
+        GuiComponentFactory factory = new GuiComponentFactory();
         recorder = new Recorder(factory);
-        assertManager = new AssertManager(recorder, new DialogManager());
+        AssertManager assertManager = new AssertManager(recorder, new DialogManager());
 
         StartAction startAction = new StartAction();
         StopAction stopAction = new StopAction();
@@ -77,12 +80,17 @@ public class RecorderLogic {
 
         new ScriptLogic(gui.getScriptGui(), recorder);
 
-        recorder.addRecorderListener(listener);
+        recorder.addRecorderListener(new RecorderListener() {
+            public void recorderUpdate() {
+                gui.display(recorder.getGestureResultList());
+            }
+        });
 
         Logger.getLogger("recorder").addAppender(new LogAreaAppender(gui));
         LOG.info("Recorder en route...");
         assertManager.start();
     }
+
 
     public JPanel getGui() {
         return gui;
@@ -95,14 +103,15 @@ public class RecorderLogic {
 //        Toolkit.getDefaultToolkit().setDynamicLayout(true);
         frame.setContentPane(getGui());
         frame.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent event) {
-                    System.exit(0);
-                }
-            });
+            @Override
+            public void windowClosing(WindowEvent event) {
+                System.exit(0);
+            }
+        });
         frame.pack();
         frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.show();
+        frame.setVisible(true);
     }
 
 
@@ -125,12 +134,14 @@ public class RecorderLogic {
         actionManager.getAction("log.clear").execute();
     }
 
+
     private class StartAction extends AbstractGuiAction {
         StartAction() {
             super("record.start");
             putValue(GuiAction.ICON_ID, IconsManager.RECORD_START);
-            putValue(GuiAction.TOOLTIP, "Enregistre les actions de l'utilisateur");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-record"));
         }
+
 
         public void execute() {
             this.setEnabled(false);
@@ -139,13 +150,13 @@ public class RecorderLogic {
         }
     }
 
-
     private class StopAction extends AbstractGuiAction {
         StopAction() {
             super("record.stop");
             putValue(GuiAction.ICON_ID, IconsManager.RECORD_STOP);
-            putValue(GuiAction.TOOLTIP, "Stop l'enregistrement des actions utilisateur");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-stop"));
         }
+
 
         public void execute() {
             this.setEnabled(false);
@@ -154,23 +165,23 @@ public class RecorderLogic {
         }
     }
 
-
     private class ClearScriptAction extends AbstractGuiAction {
         ClearScriptAction() {
             super("script.clear");
             putValue(GuiAction.ICON_ID, IconsManager.CLEAR);
-            putValue(GuiAction.TOOLTIP, "Efface le script courant");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-clear"));
         }
+
 
         public void execute() {
             recorder.clearScript();
         }
     }
 
-
     private class HighLightAction extends AbstractGuiAction implements HighlightListener {
         private ComponentHighlighter componentHighlighter;
         private boolean highlight = false;
+
 
         HighLightAction(GuiComponentFactory factory) {
             super("highlight");
@@ -178,6 +189,7 @@ public class RecorderLogic {
             componentHighlighter.setListener(this);
             updateIconAndTooltip();
         }
+
 
         public void execute() {
             if (!highlight) {
@@ -194,13 +206,11 @@ public class RecorderLogic {
         private void updateIconAndTooltip() {
             if (highlight) {
                 putValue(GuiAction.ICON_ID, IconsManager.HIGHLIGHT_STOP);
-                putValue(GuiAction.TOOLTIP,
-                    "Stop la mise en surbrillance des composants GUI testable");
+                putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.highlight-stop"));
             }
             else {
                 putValue(GuiAction.ICON_ID, IconsManager.HIGHLIGHT_START);
-                putValue(GuiAction.TOOLTIP,
-                    "Mise en surbrillance des composants GUI testable");
+                putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.highlight-start"));
             }
         }
 
@@ -210,7 +220,6 @@ public class RecorderLogic {
         }
     }
 
-
     private class ClearLogAction extends AbstractGuiAction {
         ClearLogAction() {
             super("log.clear");
@@ -218,21 +227,22 @@ public class RecorderLogic {
             putValue(GuiAction.TOOLTIP, "Efface les log");
         }
 
+
         public void execute() {
             gui.clearLogArea();
         }
     }
 
-
     private class RemoveLastGestureAction extends AbstractGuiAction
-        implements RecorderListener {
+          implements RecorderListener {
         RemoveLastGestureAction() {
             super("script.clear.last");
             putValue(GuiAction.ICON_ID, IconsManager.REMOVE_LAST);
-            putValue(GuiAction.TOOLTIP, "Supprime le dernier élément du script");
+            putValue(GuiAction.TOOLTIP, resourceBundle.getString("action.script-remove"));
             setEnabled(false);
             recorder.addRecorderListener(this);
         }
+
 
         public void execute() {
             recorder.removeLastGesture();
@@ -245,16 +255,18 @@ public class RecorderLogic {
         }
     }
 
-
     private static class LogAreaAppender extends AppenderSkeleton {
         private RecorderGui logGui;
+
 
         LogAreaAppender(RecorderGui logGui) {
             this.logGui = logGui;
         }
 
+
+        @Override
         protected void append(LoggingEvent event) {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (event.getLevel() == Level.DEBUG) {
                 buffer.append("> ");
             }
@@ -263,9 +275,12 @@ public class RecorderLogic {
         }
 
 
-        public void close() {}
+        @Override
+        public void close() {
+        }
 
 
+        @Override
         public boolean requiresLayout() {
             return false;
         }
