@@ -116,8 +116,6 @@ public class CloseFrameTest {
 
 
     private boolean isCloseButton(Component frame) {
-        System.out.println("frame.getAccessibleContext().getAccessibleName() = " + frame.getAccessibleContext().getAccessibleName());
-        System.out.println("frame.getClass().getSimpleName() = " + frame.getClass().getSimpleName());
         return frame.getAccessibleContext() != null
                && accessibleCloseName.equals(frame.getAccessibleContext().getAccessibleName());
     }
