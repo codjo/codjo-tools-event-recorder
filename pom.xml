@@ -32,7 +32,7 @@
 
     <groupId>net.codjo.tools</groupId>
     <artifactId>codjo-tools-event-recorder</artifactId>
-    <version>2.3</version>
+    <version>2.4-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
