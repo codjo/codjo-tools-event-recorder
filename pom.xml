@@ -27,7 +27,7 @@
     <parent>
         <groupId>net.codjo.pom</groupId>
         <artifactId>codjo-pom-external</artifactId>
-        <version>2.31</version>
+        <version>SNAPSHOT</version>
     </parent>
 
     <groupId>net.codjo.tools</groupId>
