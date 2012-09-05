@@ -1,27 +1,28 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.component;
 /**
- * Enumération des différentes stratégie de recherche d'un composant.
- *
- * @version $Revision: 1.1.1.1 $
+ * Enumerate available search strategy.
  */
-public final class FindStrategyId {
-    public static final FindStrategyId NONE = new FindStrategyId("NONE");
-    public static final FindStrategyId BY_NAME = new FindStrategyId("BY_NAME");
-    public static final FindStrategyId BY_LABEL = new FindStrategyId("BY_LABEL");
-    public static final FindStrategyId BY_ACCESSIBLE_CONTEXT =
-        new FindStrategyId("BY_ACCESSIBLE_CONTEXT");
-    private final String myName; // for debug only
-
-    private FindStrategyId(String name) {
-        myName = name;
-    }
-
-    public String toString() {
-        return myName;
-    }
+public enum FindStrategyId {
+    NONE,
+    BY_NAME,
+    BY_LABEL,
+    BY_ACCESSIBLE_CONTEXT;
 }

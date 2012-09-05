@@ -1,26 +1,33 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.component;
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
+import javax.swing.*;
 /**
- * Recherche le véritable composant swing sous-jacent.
- * 
- * <p>
- * Certains composants swing, comme par exemple JComboBox, sont composés de plusieurs
- * sous composants.
- * </p>
+ * Find the real underneath Swing component.
+ *
+ * <p> Some Swing components are composed of more basic components : JComboBox is a good example. </p>
  */
 class ComponentResolver {
     private String ignoredContainer;
+
 
     public JComponent find(MouseEvent event) {
         return findImpl(event.getSource(), event.getPoint());

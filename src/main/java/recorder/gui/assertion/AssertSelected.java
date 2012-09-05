@@ -1,30 +1,43 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.assertion;
-import java.awt.Component;
-import javax.swing.JList;
-import javax.swing.JTable;
+import java.awt.*;
+import javax.swing.*;
 import recorder.gui.action.GuiAction;
 import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 /**
- * Permet de créer un tag assertSelected.
+ * Creates tag assertSelected.
  */
 class AssertSelected extends AbstractAssert {
     static final String ID = "assertion.selected";
     private AssertContext context;
 
+
     AssertSelected(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertSelected");
-        putValue(GuiAction.TOOLTIP,
-            "Ajoute un 'assertion' sur la sélection d'une ligne sur une JTable ou JList");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.list-selected"));
 
         this.context = assertContext;
     }
+
 
     public void execute() {
         if (!canHandleComponentInContext()) {
@@ -36,7 +49,7 @@ class AssertSelected extends AbstractAssert {
 
         AttributeList attributes = new AttributeList();
         attributes.put("name", component.getName());
-        attributes.put("row", new Integer(rowAtPoint));
+        attributes.put("row", rowAtPoint);
         if (!handler.isRowSelected(component, rowAtPoint)) {
             attributes.put("expected", "false");
         }
@@ -45,6 +58,7 @@ class AssertSelected extends AbstractAssert {
     }
 
 
+    @Override
     public void update() {
         this.setEnabled(canHandleComponentInContext());
     }
@@ -65,8 +79,9 @@ class AssertSelected extends AbstractAssert {
         return null;
     }
 
+
     //------------------------------------------------------------------------------------------------------------------
-    // Handler des composants à list : JTable et JList
+    // Handlers for list components : JTable and JList
     //------------------------------------------------------------------------------------------------------------------
     private interface Handler {
         boolean isRowSelected(Component comp, int rowAtPoint);
@@ -85,7 +100,6 @@ class AssertSelected extends AbstractAssert {
             return ((JTable)comp).rowAtPoint(context.getPoint());
         }
     }
-
 
     private class ListHandler implements Handler {
         public boolean isRowSelected(Component comp, int rowAtPoint) {

@@ -1,96 +1,110 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui;
-import java.awt.AWTEvent;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
-import junit.framework.TestCase;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import recorder.gui.util.Util;
 /**
- * Classe de test de {@link RecorderLogic}.
+
  */
-public class RecorderLogicTest extends TestCase {
+public class RecorderLogicTest {
     private RecorderLogic logic;
     private JTextField field;
 
 
+    @Test
     public void test_log() {
-        assertNull("log non affiché par défaut", findByName("log.display", logic.getGui()));
+        Assert.assertNull("log non affiché par défaut", findByName("log.display", logic.getGui()));
 
         AbstractButton displayLog = Util.findButtonByLabel("Log", logic.getGui());
         displayLog.doClick();
 
         JTextComponent log = (JTextComponent)findByName("log.display", logic.getGui());
-        assertNotNull("Présence d'un composant log", log);
+        Assert.assertNotNull("Présence d'un composant log", log);
 
         String trace = "Log de test";
         Logger.getLogger(RecorderLogicTest.class).info(trace);
 
-        assertTrue("La trace se trouve dans le log", log.getText().contains(trace));
+        Assert.assertTrue("La trace se trouve dans le log", log.getText().contains(trace));
 
         Component clearLog = findByName("log.clear", logic.getGui());
-        assertNotNull("Présence d'un bouton clear des log", clearLog);
+        Assert.assertNotNull("Présence d'un bouton clear des log", clearLog);
 
         logic.clearLog();
 
-        assertTrue("Les logs sont éffacés", !log.getText().contains(trace));
+        Assert.assertTrue("Les logs sont éffacés", !log.getText().contains(trace));
     }
 
 
+    @Test
     public void test_highlight() {
-        assertNull("Structure non affiché par défaut", findByName("hierarchy", logic.getGui()));
+        Assert.assertNull("Structure non affiché par défaut", findByName("hierarchy", logic.getGui()));
 
         AbstractButton displayLog = Util.findButtonByLabel("Structure", logic.getGui());
         displayLog.doClick();
 
         JButton highlight = (JButton)findByName("highlight", logic.getGui());
-        assertNotNull(highlight);
+        Assert.assertNotNull(highlight);
         JTextComponent hierarchy = (JTextComponent)findByName("hierarchy", logic.getGui());
-        assertNotNull(hierarchy);
+        Assert.assertNotNull(hierarchy);
 
-        assertEquals("", hierarchy.getText());
+        Assert.assertEquals("", hierarchy.getText());
 
         highlight.doClick();
 
         mockUserIn("ok", newMouseEnter());
-        assertEquals("JPanel(ok)\n  JTextField(myfield)\n", hierarchy.getText());
+        Assert.assertEquals("JPanel(ok)\n  JTextField(myfield)\n", hierarchy.getText());
 
         highlight.doClick();
 
         hierarchy.setText("");
         mockUserIn("ok", newMouseEnter());
-        assertEquals("", hierarchy.getText());
+        Assert.assertEquals("", hierarchy.getText());
     }
 
 
+    @Test
     public void test_record() {
         Component stopRecord = findByName("record.stop", logic.getGui());
-        assertNotNull(stopRecord);
+        Assert.assertNotNull(stopRecord);
 
         Component startRecord = findByName("record.start", logic.getGui());
-        assertNotNull(startRecord);
+        Assert.assertNotNull(startRecord);
 
-        assertTrue("Bouton start enabled", startRecord.isEnabled());
-        assertTrue("Bouton stop disabled", !stopRecord.isEnabled());
+        Assert.assertTrue("Bouton start enabled", startRecord.isEnabled());
+        Assert.assertTrue("Bouton stop disabled", !stopRecord.isEnabled());
 
         logic.startRecord();
 
-        assertTrue("Bouton start disabled", !startRecord.isEnabled());
-        assertTrue("Bouton stop enabled", stopRecord.isEnabled());
+        Assert.assertTrue("Bouton start disabled", !startRecord.isEnabled());
+        Assert.assertTrue("Bouton stop enabled", stopRecord.isEnabled());
 
         logic.stopRecord();
 
-        assertTrue("Bouton start enabled", startRecord.isEnabled());
-        assertTrue("Bouton stop disabled", !stopRecord.isEnabled());
+        Assert.assertTrue("Bouton start enabled", startRecord.isEnabled());
+        Assert.assertTrue("Bouton stop disabled", !stopRecord.isEnabled());
     }
 
 /*    public void test_record_start() {
@@ -149,12 +163,13 @@ public class RecorderLogicTest extends TestCase {
 */
 
 
+    @Test
     public void test_record_export() {
         JButton removeLast = (JButton)findByName("script.export", logic.getGui());
 
 //        assertNotNull("Bouton d'export du script", removeLast);
 //        assertFalse("Boutton disabled", removeLast.isEnabled());
-        assertNull(removeLast);
+        Assert.assertNull(removeLast);
 
 //        JTextComponent scriptUi =
 //            (JTextComponent)findByName("script.display", logic.getGui());
@@ -191,8 +206,8 @@ public class RecorderLogicTest extends TestCase {
     }
 
 
-    @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         logic = new RecorderLogic();
         field = new JTextField();
     }

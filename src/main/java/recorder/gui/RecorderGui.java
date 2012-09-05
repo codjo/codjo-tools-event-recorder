@@ -1,22 +1,24 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JToolBar;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 import recorder.gui.action.ActionViewUtil;
@@ -27,7 +29,7 @@ import recorder.gui.panel.TogglePane;
 import recorder.gui.script.ScriptGui;
 import recorder.result.StatementList;
 /**
- * IHM du recorder.
+ * Recorder GUI.
  */
 public class RecorderGui extends JPanel {
     private static final Insets NO_INSETS = new Insets(0, 0, 0, 0);
@@ -43,6 +45,7 @@ public class RecorderGui extends JPanel {
     private JTextArea hierarchy;
     private JTextArea logArea;
     private ScriptGui scriptGui = new ScriptGui();
+
 
     public RecorderGui() {
         super(new BorderLayout());
@@ -63,6 +66,7 @@ public class RecorderGui extends JPanel {
         global.addTab("Structure", buildHierarchyResult());
         add(global, BorderLayout.CENTER);
     }
+
 
     public ScriptGui getScriptGui() {
         return scriptGui;
@@ -200,7 +204,7 @@ public class RecorderGui extends JPanel {
         bar.setMargin(NO_INSETS);
 
         return new TitledPanel(IconsManager.getIcon(IconsManager.SCRIPT), "Script de test", bar,
-            scroll);
+                               scroll);
     }
 
 
@@ -221,7 +225,7 @@ public class RecorderGui extends JPanel {
         bar.setMargin(NO_INSETS);
 
         return new TitledPanel(IconsManager.getIcon(IconsManager.HIERARCHY), "Structure", bar,
-            scroll);
+                               scroll);
     }
 
 

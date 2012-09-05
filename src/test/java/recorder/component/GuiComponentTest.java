@@ -1,95 +1,111 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.component;
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JMenuItem;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 /**
- * Classe de test de {@link GuiComponent}.
+
  */
-public class GuiComponentTest extends TestCase {
+public class GuiComponentTest {
+    @Test
     public void test_isA() throws Exception {
         GuiComponent guiComponent = GuiComponentFactory.newGuiComponent(new JTextField());
-        assertTrue(guiComponent.isA(JTextComponent.class));
-        assertTrue(guiComponent.isA(JTextField.class));
-        assertFalse(guiComponent.isA(JComboBox.class));
+        Assert.assertTrue(guiComponent.isA(JTextComponent.class));
+        Assert.assertTrue(guiComponent.isA(JTextField.class));
+        Assert.assertFalse(guiComponent.isA(JComboBox.class));
     }
 
 
+    @Test
     public void test_equal() throws Exception {
         JTextField fieldA = new JTextField();
         JTextField fieldB = new JTextField();
 
         GuiComponent compA = GuiComponentFactory.newGuiComponent(fieldA);
-        assertTrue("GuiComp(a) = GuiComp(a)", compA.equals(compA));
-        assertTrue("new GuiComp(a) = new GuiComp(a)",
-            compA.equals(GuiComponentFactory.newGuiComponent(fieldA)));
-        assertEquals("[hashcode] new GuiComp(a) = new GuiComp(a)", compA.hashCode(),
-            GuiComponentFactory.newGuiComponent(fieldA).hashCode());
+        Assert.assertTrue("GuiComp(a) = GuiComp(a)", compA.equals(compA));
+        Assert.assertTrue("new GuiComp(a) = new GuiComp(a)",
+                          compA.equals(GuiComponentFactory.newGuiComponent(fieldA)));
+        Assert.assertEquals("[hashcode] new GuiComp(a) = new GuiComp(a)", compA.hashCode(),
+                            GuiComponentFactory.newGuiComponent(fieldA).hashCode());
 
-        assertFalse("new GuiComp(b) != new GuiComp(a)",
-            GuiComponentFactory.newGuiComponent(fieldB).equals(GuiComponentFactory
-                .newGuiComponent(fieldA)));
-        assertFalse("new GuiComp(b) != 'carotte'",
-            GuiComponentFactory.newGuiComponent(fieldB).equals("carotte"));
+        Assert.assertFalse("new GuiComp(b) != new GuiComp(a)",
+                           GuiComponentFactory.newGuiComponent(fieldB).equals(GuiComponentFactory
+                                                                                    .newGuiComponent(fieldA)));
+        Assert.assertFalse("new GuiComp(b) != 'carotte'",
+                           GuiComponentFactory.newGuiComponent(fieldB).equals("carotte"));
     }
 
 
+    @Test
     public void test_canBeFoundWith() throws Exception {
         JButton textField = new JButton();
 
         GuiComponent gui = GuiComponentFactory.newGuiComponent(textField);
 
         textField.setName("gui.name");
-        assertTrue("Recherche 'nom' : Ok", gui.canBeFoundWith(FindStrategyId.BY_NAME));
-        assertTrue("Recherche 'label' : NOk", !gui.canBeFoundWith(FindStrategyId.BY_LABEL));
+        Assert.assertTrue("Recherche 'nom' : Ok", gui.canBeFoundWith(FindStrategyId.BY_NAME));
+        Assert.assertTrue("Recherche 'label' : NOk", !gui.canBeFoundWith(FindStrategyId.BY_LABEL));
 
         textField.setText("gui.label");
-        assertTrue("Recherche 'nom' : Ok", gui.canBeFoundWith(FindStrategyId.BY_NAME));
-        assertTrue("Recherche 'label' : Ok", gui.canBeFoundWith(FindStrategyId.BY_LABEL));
+        Assert.assertTrue("Recherche 'nom' : Ok", gui.canBeFoundWith(FindStrategyId.BY_NAME));
+        Assert.assertTrue("Recherche 'label' : Ok", gui.canBeFoundWith(FindStrategyId.BY_LABEL));
     }
 
 
+    @Test
     public void test_findByAccessibleContext() throws Exception {
         JTextField textField = new JTextField();
 
         GuiComponent guiComponent = GuiComponentFactory.newGuiComponent(textField);
-        assertFalse("Composant inretrouvable", guiComponent.isFindable());
-        assertEquals(FindStrategyId.NONE, guiComponent.getBestFindStrategyId());
+        Assert.assertFalse("Component cannot be found", guiComponent.isFindable());
+        Assert.assertEquals(FindStrategyId.NONE, guiComponent.getBestFindStrategyId());
 
         textField.getAccessibleContext().setAccessibleName("Dododidon");
 
-        assertTrue("Composant retrouvable par le contexte", guiComponent.isFindable());
-        assertEquals(FindStrategyId.BY_ACCESSIBLE_CONTEXT,
-            guiComponent.getBestFindStrategyId());
+        Assert.assertTrue("Component can be found via the context", guiComponent.isFindable());
+        Assert.assertEquals(FindStrategyId.BY_ACCESSIBLE_CONTEXT, guiComponent.getBestFindStrategyId());
     }
 
 
+    @Test
     public void test_findByName() throws Exception {
         JTextField textField = new JTextField();
 
         GuiComponent guiComponent = GuiComponentFactory.newGuiComponent(textField);
-        assertFalse("Composant inretrouvable", guiComponent.isFindable());
+        Assert.assertFalse("Component cannot be found", guiComponent.isFindable());
 
         textField.setName("Dododidon");
 
-        assertTrue("Composant retrouvable par le nom", guiComponent.isFindable());
-        assertEquals(FindStrategyId.BY_NAME, guiComponent.getBestFindStrategyId());
+        Assert.assertTrue("Component can be found via the name", guiComponent.isFindable());
+        Assert.assertEquals(FindStrategyId.BY_NAME, guiComponent.getBestFindStrategyId());
     }
 
 
+    @Test
     public void test_findByLabel_menuItem() throws Exception {
         assertFindByName(new JMenuItem());
     }
 
 
+    @Test
     public void test_findByLabel_button() throws Exception {
         assertFindByName(new JButton());
     }
@@ -97,12 +113,12 @@ public class GuiComponentTest extends TestCase {
 
     private void assertFindByName(AbstractButton comp) {
         GuiComponent guiComponent = GuiComponentFactory.newGuiComponent(comp);
-        assertFalse("Composant inretrouvable", guiComponent.isFindable());
+        Assert.assertFalse("Component cannot be found", guiComponent.isFindable());
 
         comp.setText("Bobo");
 
-        assertTrue("Composant retrouvable par le label", guiComponent.isFindable());
-        assertEquals(FindStrategyId.BY_LABEL, guiComponent.getBestFindStrategyId());
-        assertEquals("Bobo", guiComponent.getLabel());
+        Assert.assertTrue("Component can be found via the label", guiComponent.isFindable());
+        Assert.assertEquals(FindStrategyId.BY_LABEL, guiComponent.getBestFindStrategyId());
+        Assert.assertEquals("Bobo", guiComponent.getLabel());
     }
 }

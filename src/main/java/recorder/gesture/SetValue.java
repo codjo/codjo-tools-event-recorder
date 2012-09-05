@@ -1,7 +1,20 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gesture;
 import javax.swing.text.JTextComponent;
@@ -13,21 +26,21 @@ import recorder.event.GuiEventType;
 import recorder.result.Statement;
 import recorder.result.StatementList;
 /**
- * Reconnait le changement dans un champ texte, combo, etc.
+ * Detect a value change in a TextField, JComboBox, ...
  */
 class SetValue extends AbstractGesture {
     SetValue() {
-        super(new GuiEventType[] {
-                GuiEventType.KEY, GuiEventType.COMBO_FOCUS_LOST,
-                GuiEventType.CHECKBOX_CLICK
-            }, FindStrategyId.BY_NAME);
+        super(new GuiEventType[]{GuiEventType.KEY, GuiEventType.COMBO_FOCUS_LOST, GuiEventType.CHECKBOX_CLICK},
+              FindStrategyId.BY_NAME);
     }
 
+
+    @Override
     protected void receiveImpl(GuiEventList list, StatementList resultList) {
         GuiEvent event = list.peek();
 
         if (GuiEventType.KEY == event.getType()
-                && event.getSource().isA(JTextComponent.class)) {
+            && event.getSource().isA(JTextComponent.class)) {
             list.pop();
             proceedKeyEvent(event, resultList);
         }
@@ -35,8 +48,8 @@ class SetValue extends AbstractGesture {
             list.pop();
 
             GuiEvent prevFocusGain =
-                list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN,
-                        event.getSource()));
+                  list.findPrevious(new GuiEvent(GuiEventType.COMBO_FOCUS_GAIN,
+                                                 event.getSource()));
 
             if (prevFocusGain == null || !sameValue(event, prevFocusGain)) {
                 resultList.add(buildResult(event.getSource(), event.getValue()));
@@ -51,11 +64,12 @@ class SetValue extends AbstractGesture {
 
 
     private boolean sameValue(GuiEvent event, GuiEvent prevFocusGain) {
+        //noinspection SimplifiableIfStatement
         if (event.getValue() == prevFocusGain.getValue()) {
             return true;
         }
         return event.getValue() != null && prevFocusGain.getValue() != null
-        && prevFocusGain.getValue().equals(event.getValue());
+               && prevFocusGain.getValue().equals(event.getValue());
     }
 
 
@@ -66,7 +80,7 @@ class SetValue extends AbstractGesture {
         Statement last = resultList.lastResult();
 
         if (last instanceof SetValueStatement
-                && ((SetValueStatement)last).getComponent().equals(component)) {
+            && ((SetValueStatement)last).getComponent().equals(component)) {
             ((SetValueStatement)last).setValue(value);
         }
         else {
@@ -79,25 +93,29 @@ class SetValue extends AbstractGesture {
         return new SetValueStatement(comp, value);
     }
 
+
     /**
-     * Traduction en xml d'une gesture de positionnement de valeur.
+     * Translate the gesture in XML.
      */
     private static class SetValueStatement implements Statement {
         private GuiComponent component;
         private Object value;
+
 
         SetValueStatement(GuiComponent component, Object value) {
             this.component = component;
             this.value = value;
         }
 
+
         public boolean isEquivalentTo(Statement stmt) {
             return false;
         }
 
+
         public String toXml() {
             return "<setValue name=\"" + component.getName() + "\" value=\"" + value
-            + "\"/>";
+                   + "\"/>";
         }
 
 

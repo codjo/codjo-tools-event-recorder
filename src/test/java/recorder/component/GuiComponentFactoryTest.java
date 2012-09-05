@@ -1,35 +1,41 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.component;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import junit.framework.TestCase;
-import recorder.component.GuiComponent;
-/**
- * Classe de test de {@link GuiComponentFactory}.
- */
-public class GuiComponentFactoryTest extends TestCase {
+import javax.swing.*;
+import org.junit.Assert;
+import org.junit.Test;
+public class GuiComponentFactoryTest {
+    @Test
     public void test_container_noPoint() throws Exception {
         final JComponent source = new JLabel();
 
         GuiComponentFactory factory = new GuiComponentFactory();
-        assertEquals(source, factory.find(source).getSwingComponent());
+        Assert.assertEquals(source, factory.find(source).getSwingComponent());
     }
 
 
     /**
-     * Un combobox est constitué de pleins de sous-composant.
+     * JComboBox is composed of more atomic GUI component.
      */
+    @Test
     public void test_jcombobox() {
         JComponent combo = new JComboBox();
         JComponent subComponent = new JLabel();
@@ -37,27 +43,30 @@ public class GuiComponentFactoryTest extends TestCase {
 
         GuiComponentFactory factory = new GuiComponentFactory();
         GuiComponent guiComponent = factory.find(subComponent);
-        assertFalse("Pas de nom doc pas retrouvable", guiComponent.isFindable());
-        assertSame(combo, guiComponent.getSwingComponent());
+        Assert.assertFalse("No name and therefore can not be found", guiComponent.isFindable());
+        Assert.assertSame(combo, guiComponent.getSwingComponent());
     }
 
 
+    @Test
     public void test_jcombobox_mousevent() {
         JComponent combo = new JComboBox();
         JComponent subComponent = new JLabel();
         combo.add(subComponent);
         GuiComponentFactory factory = new GuiComponentFactory();
-        assertSame(combo, factory.find(newEvent(subComponent)).getSwingComponent());
+        Assert.assertSame(combo, factory.find(newEvent(subComponent)).getSwingComponent());
     }
 
 
+    @Test
     public void test_jcomponent() throws Exception {
         JComponent source = new JLabel();
         GuiComponentFactory factory = new GuiComponentFactory();
-        assertSame(source, factory.find(newEvent(source)).getSwingComponent());
+        Assert.assertSame(source, factory.find(newEvent(source)).getSwingComponent());
     }
 
 
+    @Test
     public void test_excpetion() throws Exception {
         final JComponent source = new JLabel();
         JComponent container = new JPanel();
@@ -66,52 +75,54 @@ public class GuiComponentFactoryTest extends TestCase {
 
         GuiComponentFactory factory = new GuiComponentFactory();
         factory.setIgnoredContainer("ignore");
-        assertNull("Le composant source est dans un composant ignoré, il n'est donc pas 'trouvé'",
-            factory.find(newEvent(source)));
+        Assert.assertNull("The component is under an ignored one. It cannot be 'found'",
+                          factory.find(newEvent(source)));
     }
 
 
+    @Test
     public void test_container() throws Exception {
         final JComponent source = new JLabel();
         Container frame = newFrame(source);
 
         GuiComponentFactory factory = new GuiComponentFactory();
-        assertSame(source, factory.find(newEvent(frame)).getSwingComponent());
+        Assert.assertSame(source, factory.find(newEvent(frame)).getSwingComponent());
     }
 
 
+    @Test
     public void test_container_inContainer() throws Exception {
         Container frame = newFrame(new Container());
 
         GuiComponentFactory factory = new GuiComponentFactory();
-        assertNull(factory.find(newEvent(frame)));
+        Assert.assertNull(factory.find(newEvent(frame)));
     }
 
 
+    @Test
     public void test_container_empty() throws Exception {
         Container frame = newFrame(null);
 
         GuiComponentFactory factory = new GuiComponentFactory();
-        assertNull(factory.find(newEvent(frame)));
+        Assert.assertNull(factory.find(newEvent(frame)));
     }
 
 
     private Container newFrame(final Component source) {
-        Container frame =
-            new JFrame() {
-                public Component findComponentAt(Point point) {
-                    if (point == null) {
-                        throw new NullPointerException();
-                    }
-                    if (source != null) {
-                        return source;
-                    }
-                    else {
-                        return this;
-                    }
+        return new JFrame() {
+            @Override
+            public Component findComponentAt(Point point) {
+                if (point == null) {
+                    throw new NullPointerException();
                 }
-            };
-        return frame;
+                if (source != null) {
+                    return source;
+                }
+                else {
+                    return this;
+                }
+            }
+        };
     }
 
 

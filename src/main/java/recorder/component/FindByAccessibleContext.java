@@ -16,25 +16,21 @@
  *    implied. See the License for the specific language governing permissions
  *    and limitations under the License.
  */
-package recorder.gui.action;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-public class GuiActionManager {
-    private Map<Object, GuiAction> storage = new HashMap<Object, GuiAction>();
-
-
-    public void declare(GuiAction action) {
-        storage.put(action.getValue(GuiAction.ACTION_ID), action);
+package recorder.component;
+import javax.accessibility.AccessibleContext;
+import javax.swing.*;
+/**
+ * Search strategy using the swing accessible context. Can find a component by the {@link javax.accessibility.AccessibleContext} name.
+ */
+class FindByAccessibleContext implements FindStrategy {
+    public boolean canFound(JComponent swingComponent) {
+        AccessibleContext accessibleContext = swingComponent.getAccessibleContext();
+        return accessibleContext != null && accessibleContext.getAccessibleName() != null
+               && accessibleContext.getAccessibleName().length() > 0;
     }
 
 
-    public GuiAction getAction(String actionId) {
-        return storage.get(actionId);
-    }
-
-
-    public Iterator<GuiAction> actions() {
-        return storage.values().iterator();
+    public FindStrategyId getStrategyId() {
+        return FindStrategyId.BY_ACCESSIBLE_CONTEXT;
     }
 }

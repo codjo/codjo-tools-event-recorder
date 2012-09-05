@@ -1,28 +1,42 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package recorder.gui.assertion;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import recorder.gui.action.GuiAction;
 import recorder.result.AttributeList;
 import recorder.result.DefaultStatement;
 /**
- * Permet de créer un tag assertTree.
+ * Creates tag assertTree.
  */
 class AssertTree extends AbstractAssert {
     static final String ID = "assertion.tree";
     private AssertContext context;
 
+
     AssertTree(AssertContext assertContext) {
         super(ID, COMPONENT_ASSERT);
         putValue(GuiAction.LABEL, "AssertTree");
-        putValue(GuiAction.TOOLTIP,
-            "Ajoute un 'assertion' sur l'existance d'un noeud dans un arbre");
+        putValue(GuiAction.TOOLTIP, resourceBundle.getString("assert.tree-node"));
         this.context = assertContext;
     }
+
 
     public void execute() {
         if (!isAllowed()) {
@@ -30,7 +44,7 @@ class AssertTree extends AbstractAssert {
         }
         JTree tree = (JTree)context.getSource();
         TreePath path =
-            tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
+              tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
 
         AttributeList attributes = new AttributeList();
         attributes.put("name", tree.getName());
@@ -41,6 +55,7 @@ class AssertTree extends AbstractAssert {
     }
 
 
+    @Override
     public void update() {
         this.setEnabled(isAllowed());
     }
@@ -52,14 +67,14 @@ class AssertTree extends AbstractAssert {
         }
         JTree tree = (JTree)context.getSource();
         TreePath path =
-            tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
+              tree.getClosestPathForLocation(context.getPoint().x, context.getPoint().y);
 
         return path != null;
     }
 
 
     private static String pathToString(JTree tree, TreePath treePath) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         Object[] path = treePath.getPath();
 

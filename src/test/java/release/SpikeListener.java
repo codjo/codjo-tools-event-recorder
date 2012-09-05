@@ -1,42 +1,48 @@
 /*
- * codjo.net
+ * codjo (Prototype)
+ * =================
  *
- * Common Apache License 2.0
+ *    Copyright (C) 2005, 2012 by codjo.net
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ *    implied. See the License for the specific language governing permissions
+ *    and limitations under the License.
  */
 package release;
-import java.awt.AWTEvent;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import javax.accessibility.AccessibleContext;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JTable;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import org.apache.log4j.Logger;
 import recorder.component.GuiComponent;
 import recorder.component.GuiComponentFactory;
 import recorder.gui.RecorderLogic;
 /**
- * Listener AWT utilisé pour chercher des moyens de détecter une 'geste' de
- * l'utilisateur.
+ * Listener AWT utilisé pour chercher des moyens de détecter une 'geste' de l'utilisateur.
  */
 public class SpikeListener implements AWTEventListener {
     private static final Logger LOG = Logger.getLogger(RecorderLogic.class);
+
 
     public void eventDispatched(AWTEvent awtEvent) {
         GuiComponentFactory factory = new GuiComponentFactory();
         factory.setIgnoredContainer("recorder.mainPanel");
 
         if (awtEvent instanceof MouseEvent
-                && awtEvent.getID() != MouseEvent.MOUSE_MOVED
-                && awtEvent.getID() != MouseEvent.MOUSE_ENTERED
-                && awtEvent.getID() != MouseEvent.MOUSE_EXITED) {
+            && awtEvent.getID() != MouseEvent.MOUSE_MOVED
+            && awtEvent.getID() != MouseEvent.MOUSE_ENTERED
+            && awtEvent.getID() != MouseEvent.MOUSE_EXITED) {
             GuiComponent data = factory.find(awtEvent.getSource());
             if (data == null) {
                 return;
@@ -61,7 +67,7 @@ public class SpikeListener implements AWTEventListener {
                 LOG.debug("\ttable = " + tree);
                 LOG.debug("\tpath = " + path + "(" + row + ")");
                 LOG.debug("\tpath.getLastPathComponent() = "
-                    + path.getLastPathComponent());
+                          + path.getLastPathComponent());
                 LOG.debug("\t isCollapsed = " + tree.isCollapsed(path));
                 LOG.debug("\t isRowSelected = " + tree.isRowSelected(row));
             }
@@ -69,7 +75,7 @@ public class SpikeListener implements AWTEventListener {
                 JList list = (JList)result;
                 LOG.debug("\tlist=" + list.getSelectedValue());
                 LOG.debug("\tlist="
-                    + list.locationToIndex(((MouseEvent)awtEvent).getPoint()));
+                          + list.locationToIndex(((MouseEvent)awtEvent).getPoint()));
             }
             if (result instanceof JCheckBox) {
                 JCheckBox checkBox = (JCheckBox)result;
@@ -87,7 +93,7 @@ public class SpikeListener implements AWTEventListener {
             }
         }
         if (awtEvent instanceof WindowEvent
-                && awtEvent.getID() == WindowEvent.WINDOW_CLOSING) {
+            && awtEvent.getID() == WindowEvent.WINDOW_CLOSING) {
             GuiComponent data = factory.find(awtEvent.getSource());
             System.out.println("awtEvent = " + awtEvent);
             System.out.println("awtEvent.getSource() = " + awtEvent.getSource());
